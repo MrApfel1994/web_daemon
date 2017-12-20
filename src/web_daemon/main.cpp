@@ -1,0 +1,59 @@
+
+#include <QtGui/QApplication>
+//#include <QtNetwork/QsslConfiguration>
+#include <QtNetwork/QNetworkReply>
+
+#include <iostream>
+#include <thread>
+
+#include "WebApp.h"
+#include "WebView.h"
+
+void sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist){
+	qnr->ignoreSslErrors();
+}
+
+int main(int argc, char *argv[]) {
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
+
+	QApplication qt_app(argc, argv);
+
+	qt_app.setQuitOnLastWindowClosed(false);
+
+    {
+        //QSslConfiguration sslconf = QSslConfiguration::defaultConfiguration();
+        //QList<QSslCertificate> cert_list = sslconf.caCertificates();
+    }
+
+	WebView web_view;
+	//QWebView web_view;
+	web_view.setAttribute(Qt::WA_DontShowOnScreen);
+	web_view.show();
+	web_view.load(QUrl("http://html5test.com"));
+	//web_view.load(QUrl("http://malighting.com"));
+    //web_view.load(QUrl("http://www.blobsallad.se/"));
+	//web_view.load(QUrl("https://google.com"));
+
+	std::string app_id = "0";
+
+	if (argc > 1) {
+		app_id = argv[1];
+	}
+
+#if defined(QT_OPENSSL) && !defined(QT_NO_OPENSSL)
+	web_view.connect(web_view.page()->networkAccessManager(),
+		SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> &)),
+		SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> &)));
+#endif
+
+	WebApp web_app(app_id.c_str(), &web_view);
+
+	auto thr = std::thread{[&web_app]() { return web_app.Run(); }};
+
+	int ret = qt_app.exec();
+
+	std::cout << "Joining thread" << std::endl;
+	thr.join();
+
+	return ret;
+}

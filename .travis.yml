@@ -1,0 +1,41 @@
+language: cpp
+compiler: gcc
+dist: trusty
+env:
+- PACKAGE_VERSION="0.0.*"
+matrix:
+  include:
+  - compiler: gcc
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-6
+    env: COMPILER=g++-6
+install:
+- sudo apt-get install binutils-2.26
+- export PATH=/usr/lib/binutils-2.26/bin:${PATH}
+- sudo apt-get install freeglut3-dev
+- sudo apt-get install libegl1-mesa-dev
+- sudo apt-get install libgles2-mesa-dev
+- sudo apt-get install libsdl2-dev
+- python download.py
+script:
+- mkdir build
+- "(cd build && cmake .. && make)"
+- "(cd build/src/common/tests && ./test_common)"
+- zip web_daemon.zip ./web_client
+- zip -ur web_daemon.zip ./web_daemon
+before_deploy:
+- git config --local user.name "MrApfel1994"
+- git config --local user.email "mrapfel1994@gmail.com"
+- git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key:
+    secure: gau3vEh3LZnvAMvDvjsAx/zoySwB4IX3rAOUnU4GGRyS1haWyylFwTSyr2goo8iV2MaZIRGA7WX0R+6sWEDtm7mvvW3ONUJAxnxxUCMHCLnxr9dAfs08t20yfGg45nEzBc1Up41t/v6z0G0wlpkTlsN5SP9vtdfxC0AVnj0sLNDGbHQWN6UXZaMZ5tvNrqmM7QKV5NbGSqpw487iAttdQTykwzoQ4tXuoWc2renQ85pijKj+J5/OoC5Oed7J7w8jXWpIlaHXScQLmwr6ZL3tMqTcF0pcCKPr51CNApapCGqKLSSh3VZ28vmsRk0kmJ4JqJRmbipEzM8n58zjFiu/AIVGDW3rwpI/OQr6X2/rYBs6sNJvPBETlYkUE7oHIGjUhP5A9t2o9vOnR8g3uqJS1YPAgZLrso+Skk2zoKp/nVUvTWGnMIm0ocQSs3WeYS4Dp4oHOJ+qWp3jrpJVr1+cBEASWPfv0f4PoGn2AviFQOYoXkxCWoYRoROXGieGIpv35bU3lXA5TjEsYL5goP7+dT6WUOZsgxuIoehVdJSDSI1TS6g1BZp6l2pvBZzOomtNek0uYPcJCWRBD9XYldVSFc/Lafs+LXOhTcObT2m+cDZmIv6GeRDzyaY29g/NR6kKWVcApOlrXWYd9UGp54fqgXeLuoaCckuQRkc1MeNddT4=
+  file: web_daemon.zip
+  skip_cleanup: true
+  on:
+    repo: MrApfel1994/web_daemon
