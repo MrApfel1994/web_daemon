@@ -1,5 +1,7 @@
+.DS_Store
 build*
 src/libs*
+src/.DS_Store
 check*
 web_client*
 web_daemon*

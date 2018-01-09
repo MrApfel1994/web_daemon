@@ -1,5 +1,6 @@
 
 import os
+import platform
 import urllib2
 import zipfile
 
@@ -53,9 +54,12 @@ def unzip_file(file_name, unzip_dest):
     zip_ref.extractall(unzip_dest)
     zip_ref.close()
 
-if os.name == 'nt':
+if platform.system() == 'Windows':
     download_file('1rkvUF6rrB3bWyi47-2hcMYCN_8tmw5Zb', 'libs.zip')
+elif platform.system() == 'Darwin':
+    download_file('1OeLpMZxQTs_6Pu85fZFSLoDYiB3xIx96', 'libs.zip')
 else:
     download_file('1vjiU9jbtFgJBwWypQ_JPrF2lY3GUqb_s', 'libs.zip')
+
 unzip_file('libs.zip', 'src/')
 os.remove('libs.zip')

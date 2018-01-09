@@ -16,7 +16,11 @@ IF(WIN32)
         endif()
     ENDIF(SDL_STATIC)
 ELSE(WIN32)
-    set(LIBS X11 SDL2 dl pthread GL glut c)
+    IF(APPLE)
+        set(LIBS SDL2)
+    ELSE(APPLE)
+        set(LIBS X11 SDL2 dl pthread GL glut c)
+    ENDIF(APPLE)
 ENDIF(WIN32)
 
 set(SOURCE_FILES    main.cpp
@@ -30,8 +34,8 @@ source_group("src" FILES ${SOURCE_FILES})
 add_executable(web_client ${ALL_SOURCE_FILES})
 target_link_libraries(web_client common ${LIBS})
 
-add_dependencies(web_client web_daemon)
+#add_dependencies(web_client web_daemon)
 
-add_custom_command(TARGET web_client 
+add_custom_command(TARGET web_client
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:web_client> ${WORKING_DIRECTORY})

@@ -1,10 +1,22 @@
 cmake_minimum_required(VERSION 2.8)
 project(web_daemon)
 
+find_library(CORE_SERVICES CoreServices)
+find_library(APP_SERVICES ApplicationServices)
+find_library(CARBON Carbon)
+find_library(APPKIT AppKit)
+find_library(SYSCONFIG SystemConfiguration)
+find_library(SEQURITY Security)
+
 IF(WIN32)
 	set(LIBS QtCore QtGui QtNetwork QtWebKit Imm32 Mincore Shlwapi winmm Ws2_32)
 ELSE(WIN32)
-    set(LIBS QtWebKit QtGui QtNetwork QtCore X11 SM ICE glib-2.0 Xrandr Xrender Xcursor Xfixes Xext Xinerama Xi freetype pthread dl)
+    IF(APPLE)
+        add_definitions(-DQT_MAC_USE_COCOA)
+        set(LIBS QtWebKit QtGui QtNetwork QtCore z ${CORE_SERVICES} ${APP_SERVICES} ${CARBON} ${APPKIT} ${SYSCONFIG} ${SEQURITY})
+    ELSE(APPLE)
+        set(LIBS QtWebKit QtGui QtNetwork QtCore X11 SM ICE glib-2.0 Xrandr Xrender Xcursor Xfixes Xext Xinerama Xi freetype pthread dl)
+    ENDIF(APPLE)
 ENDIF(WIN32)
 
 set(SOURCE_FILES    main.cpp

@@ -8,7 +8,11 @@ IF(WIN32)
         set(LIBS )
     endif()
 ELSE(WIN32)
-    set(LIBS rt)
+    IF(APPLE)
+        set(LIBS )
+    ELSE(APPLE)
+        set(LIBS rt)
+    ENDIF(APPLE)
 ENDIF(WIN32)
 
 set(SOURCE_FILES MsgDef.h
@@ -22,10 +26,10 @@ set(WIN32_SOURCE_FILES PipeClient_win32.cpp
                        Process_win32.cpp
                        SharedMemory_win32.cpp)
 
-set(LINUX_SOURCE_FILES PipeClient_linux.cpp
-                       PipeServer_linux.cpp
-                       Process_linux.cpp
-                       SharedMemory_linux.cpp)
+set(UNIX_SOURCE_FILES PipeClient_unix.cpp
+                      PipeServer_unix.cpp
+                      Process_unix.cpp
+                      SharedMemory_unix.cpp)
 
 list(APPEND ALL_SOURCE_FILES ${SOURCE_FILES})
 source_group("src" FILES ${SOURCE_FILES})
@@ -36,8 +40,8 @@ IF(WIN32)
 ELSE(WIN32)
     set(CMAKE_CXX_STANDARD 11)
 
-    list(APPEND ALL_SOURCE_FILES ${LINUX_SOURCE_FILES})
-    source_group("src" FILES ${LINUX_SOURCE_FILES})
+    list(APPEND ALL_SOURCE_FILES ${UNIX_SOURCE_FILES})
+    source_group("src" FILES ${UNIX_SOURCE_FILES})
 ENDIF(WIN32)
 
 add_library(common STATIC ${ALL_SOURCE_FILES})

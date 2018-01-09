@@ -4,10 +4,15 @@
 #include <cstring>
 
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include <spawn.h>
-#include <wait.h>
+#include <sys/wait.h>
+
+#ifdef __APPLE__
+extern char **environ;
+#endif
 
 WD::Process::Process() {
 	pid_ = { 0 };

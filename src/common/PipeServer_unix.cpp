@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 
+#include <errno.h>
 #include <zconf.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -103,7 +104,8 @@ bool WD::PipeServer::WaitForEvent(int time_ms) {
         FD_SET(fd_, &set);
 
         struct timeval timeout = { 0 };
-        timeout.tv_usec = time_ms * 1000;
+        timeout.tv_sec = time_ms / 1000;
+        timeout.tv_usec = (time_ms % 1000) * 1000;
 
         int rc = select(fd_ + 1, &set, nullptr, nullptr, &timeout);
         if (rc != -1) {
