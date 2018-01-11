@@ -25,6 +25,9 @@ script:
 - mkdir build
 - "(cd build && cmake .. && make)"
 - "(cd build/src/common/tests && ./test_common)"
+- python download.py
+- ./src/libs/upx --best ./web_client
+- ./src/libs/upx --best ./web_daemon
 - zip web_daemon.zip ./web_client
 - zip -ur web_daemon.zip ./web_daemon
 before_deploy:
