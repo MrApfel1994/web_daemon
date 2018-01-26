@@ -57,7 +57,7 @@ def unzip_file(file_name, unzip_dest):
 if platform.system() == 'Windows':
     download_file('1rkvUF6rrB3bWyi47-2hcMYCN_8tmw5Zb', 'libs.zip')
 elif platform.system() == 'Darwin':
-    download_file('1OeLpMZxQTs_6Pu85fZFSLoDYiB3xIx96', 'libs.zip')
+    download_file('1e7Lg9FkaC2YYDtekwhSw1t1jaVxmnnjT', 'libs.zip')
 else:
     download_file('1vjiU9jbtFgJBwWypQ_JPrF2lY3GUqb_s', 'libs.zip')
 
