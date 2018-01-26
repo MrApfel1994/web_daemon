@@ -26,6 +26,7 @@ script:
 - "(cd build && cmake .. && make)"
 - "(cd build/src/common/tests && ./test_common)"
 - python download.py
+- chmod +x ./src/libs/upx
 - ./src/libs/upx --best ./web_client
 - ./src/libs/upx --best ./web_daemon
 - zip web_daemon.zip ./web_client
