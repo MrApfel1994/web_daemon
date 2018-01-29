@@ -25,20 +25,21 @@ int main(int argc, char *argv[]) {
         //QList<QSslCertificate> cert_list = sslconf.caCertificates();
     }
 
-	WebView web_view;
-	//QWebView web_view;
-	web_view.setAttribute(Qt::WA_DontShowOnScreen);
-	web_view.show();
-	web_view.load(QUrl("http://html5test.com"));
-	//web_view.load(QUrl("http://malighting.com"));
-    //web_view.load(QUrl("http://www.blobsallad.se/"));
-	//web_view.load(QUrl("https://google.com"));
-
+	
 	std::string app_id = "0";
+	std::string default_url = "http://html5test.com";
 
 	if (argc > 1) {
 		app_id = argv[1];
+		if (argc > 2) {
+			default_url = argv[2];
+		}
 	}
+
+	WebView web_view;
+	web_view.setAttribute(Qt::WA_DontShowOnScreen);
+	web_view.show();
+	web_view.load(QUrl(default_url.c_str()));
 
 #if defined(QT_OPENSSL) && !defined(QT_NO_OPENSSL)
 	web_view.connect(web_view.page()->networkAccessManager(),

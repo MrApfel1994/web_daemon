@@ -37,7 +37,7 @@ int ClientApp::Init(int w, int h) {
     SDL_GL_SetSwapInterval(1);
 
     try {
-		daemon_proc_ = WD::Process{ "web_daemon test_id", false };
+		daemon_proc_ = WD::Process{ "web_daemon test_id https://google.com", false };
 		WD::Process::Sleep(1000);
         pipe_ = WD::PipeClient{ "test_id" };
     } catch (std::runtime_error &) {
