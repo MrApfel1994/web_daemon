@@ -11,10 +11,10 @@ WD::PipeServer::PipeServer(const char *name) {
     name_ = ".";
     name_ += name;
 
-	fd_ = socket(AF_UNIX, SOCK_DGRAM, 0);
-	if (fd_ == -1) {
-		throw std::runtime_error("Cannot create pipe!");
-	}
+    fd_ = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (fd_ == -1) {
+        throw std::runtime_error("Cannot create pipe!");
+    }
 
     addr_ = { 0 };
     addr_.sun_family = AF_UNIX;
@@ -47,7 +47,7 @@ WD::PipeServer::PipeServer(const char *name) {
 }
 
 WD::PipeServer::~PipeServer() {
-	if (fd_ != -1) {
+    if (fd_ != -1) {
         close(fd_);
         unlink(name_.c_str());
     }
@@ -55,7 +55,7 @@ WD::PipeServer::~PipeServer() {
 
 WD::PipeServer::PipeServer(WD::PipeServer &&rhs) noexcept : name_(std::move(rhs.name_)) {
     cur_state_ = rhs.cur_state_;
-	fd_ = rhs.fd_;
+    fd_ = rhs.fd_;
     rhs.fd_ = -1;
     addr_ = rhs.addr_;
     rhs.addr_ = { 0 };
@@ -88,11 +88,11 @@ WD::PipeServer &WD::PipeServer::operator=(WD::PipeServer &&rhs) noexcept {
 bool WD::PipeServer::Connect() {
     if (Read(&conn_buf[0], sizeof(conn_buf))) {
     }
-	return true;
+    return true;
 }
 
 bool WD::PipeServer::IsAsyncIOComplete() {
-	return !pending_io_;
+    return !pending_io_;
 }
 
 bool WD::PipeServer::WaitForEvent(int time_ms) {
@@ -117,7 +117,7 @@ bool WD::PipeServer::WaitForEvent(int time_ms) {
         }
     }
 
-	return false;
+    return false;
 }
 
 bool WD::PipeServer::Read(void *buf, uint32_t buf_size) {
@@ -138,9 +138,9 @@ bool WD::PipeServer::Read(void *buf, uint32_t buf_size) {
 }
 
 bool WD::PipeServer::Write(const void *buf, uint32_t size) {
-	cur_state_ = Writing;
+    cur_state_ = Writing;
 
-	auto bytes_written = sendto(fd_, buf, (size_t)size, 0, (const sockaddr *)&cl_addr_, sizeof(cl_addr_));
+    auto bytes_written = sendto(fd_, buf, (size_t)size, 0, (const sockaddr *)&cl_addr_, sizeof(cl_addr_));
     if (bytes_written < 0) {
         return false;
     } else {

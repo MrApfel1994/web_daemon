@@ -37,8 +37,8 @@ int ClientApp::Init(int w, int h) {
     SDL_GL_SetSwapInterval(1);
 
     try {
-		daemon_proc_ = WD::Process{ "web_daemon test_id https://google.com", false };
-		WD::Process::Sleep(1000);
+        daemon_proc_ = WD::Process{ "web_daemon test_id https://google.com", false };
+        WD::Process::Sleep(1000);
         pipe_ = WD::PipeClient{ "test_id" };
     } catch (std::runtime_error &) {
         return -1;
@@ -80,17 +80,17 @@ int ClientApp::Init(int w, int h) {
             
             pipe_.SetBlocking(false);
 
-			//
-			/*WD::PageEventMsg req = {};
-			req.msg_type = WD::PageEvent;
-			req.ev_type = WD::UrlRequest;
-			strcpy(req.url, "https://google.com");
+            //
+            /*WD::PageEventMsg req = {};
+            req.msg_type = WD::PageEvent;
+            req.ev_type = WD::UrlRequest;
+            strcpy(req.url, "https://google.com");
 
-			pipe_.Write(&req, sizeof(req));*/
+            pipe_.Write(&req, sizeof(req));*/
         }
     }
 
-	frame_request_needed_ = true;
+    frame_request_needed_ = true;
 
     return 0;
 }
@@ -104,13 +104,13 @@ void ClientApp::Destroy() {
 
 void ClientApp::Frame() {
     if (frame_request_needed_) {
-		WD::FrameRequestMsg req = { 0 };
-		req.msg_type = WD::FrameRequest;
-		req.flags = WD::LockFullHorizontalSpan;
+        WD::FrameRequestMsg req = { 0 };
+        req.msg_type = WD::FrameRequest;
+        req.flags = WD::LockFullHorizontalSpan;
 
         /*if (pipe_.Write(&req, sizeof(req))) {
-			frame_request_needed_ = false;
-		}*/
+            frame_request_needed_ = false;
+        }*/
     }
 }
 
@@ -181,9 +181,9 @@ void ClientApp::Receive() {
                 updated_regions_count_ = msg->updated_regions_count;
                 memcpy(&updated_regions_[0], msg->updated_regions, sizeof(msg->updated_regions));
 
-				if (!frame_updated_) {
-					frame_request_needed_ = true;
-				}
+                if (!frame_updated_) {
+                    frame_request_needed_ = true;
+                }
             }
             break;
         default:
@@ -238,8 +238,8 @@ void ClientApp::PollEvents() {
             msg.y = (int32_t)e.motion.y;
 
             if (!pipe_.Write(&msg, sizeof(msg))) {
-				printf("-Write failed!\n");
-			}
+                printf("-Write failed!\n");
+            }
         }
         break;
         case SDL_MOUSEWHEEL: {
@@ -259,9 +259,9 @@ void ClientApp::PollEvents() {
                 texture_ = SDL_CreateTexture(renderer_, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
                                              e.window.data1, e.window.data2);
 
-				remote_width_ = 0;
-				remote_height_ = 0;
-				framebuf_ = {};
+                remote_width_ = 0;
+                remote_height_ = 0;
+                framebuf_ = {};
 
                 width_ = (int)e.window.data1;
                 height_ = (int)e.window.data2;

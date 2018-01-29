@@ -28,32 +28,32 @@ WD::SharedMemory::SharedMemory(const char *name, size_t size, int flags) : name_
 }
 
 WD::SharedMemory::~SharedMemory() {
-	UnmapViewOfFile(p_buf_);
-	CloseHandle(handle_);
+    UnmapViewOfFile(p_buf_);
+    CloseHandle(handle_);
 }
 
 WD::SharedMemory::SharedMemory(WD::SharedMemory &&rhs) noexcept : name_(std::move(rhs.name_)) {
     size_ = rhs.size_;
     rhs.size_ = 0;
-	handle_ = rhs.handle_;
-	rhs.handle_ = NULL;
-	p_buf_ = rhs.p_buf_;
-	rhs.p_buf_ = NULL;
+    handle_ = rhs.handle_;
+    rhs.handle_ = NULL;
+    p_buf_ = rhs.p_buf_;
+    rhs.p_buf_ = NULL;
 }
 
 WD::SharedMemory &WD::SharedMemory::operator=(WD::SharedMemory &&rhs) noexcept {
-	if (handle_) {
-		UnmapViewOfFile(p_buf_);
-		CloseHandle(handle_);
-	}
+    if (handle_) {
+        UnmapViewOfFile(p_buf_);
+        CloseHandle(handle_);
+    }
 
-	name_ = std::move(name_);
+    name_ = std::move(name_);
     size_ = rhs.size_;
     rhs.size_ = 0;
-	handle_ = rhs.handle_;
-	rhs.handle_ = NULL;
-	p_buf_ = rhs.p_buf_;
-	rhs.p_buf_ = NULL;
+    handle_ = rhs.handle_;
+    rhs.handle_ = NULL;
+    p_buf_ = rhs.p_buf_;
+    rhs.p_buf_ = NULL;
 
     return *this;
 }

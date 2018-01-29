@@ -16,9 +16,9 @@ struct SDL_Window;
 class ClientApp {
     SDL_Renderer    *renderer_ = nullptr;
     SDL_Texture     *texture_ = nullptr;
-    SDL_Window		*window_ = nullptr;
+    SDL_Window      *window_ = nullptr;
 
-	WD::Process daemon_proc_;
+    WD::Process daemon_proc_;
     WD::PipeClient pipe_;
     WD::SharedMemory framebuf_;
 
@@ -30,7 +30,7 @@ class ClientApp {
     int updated_regions_count_;
     WD::Region updated_regions_[16];
 
-	void Receive();
+    void Receive();
     void PollEvents();
 public:
     ClientApp();

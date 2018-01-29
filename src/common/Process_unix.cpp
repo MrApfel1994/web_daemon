@@ -15,15 +15,15 @@ extern char **environ;
 #endif
 
 WD::Process::Process() {
-	pid_ = { 0 };
+    pid_ = { 0 };
 }
 
 WD::Process::Process(const char *name, bool detached_console) {
-	pid_ = { 0 };
+    pid_ = { 0 };
 
-	if (!Run(name, detached_console)) {
-		throw std::runtime_error("Cannot run process!");
-	}
+    if (!Run(name, detached_console)) {
+        throw std::runtime_error("Cannot run process!");
+    }
 }
 
 WD::Process::~Process() {
@@ -31,21 +31,21 @@ WD::Process::~Process() {
 }
 
 WD::Process::Process(WD::Process &&rhs) noexcept {
-	pid_ = rhs.pid_;
+    pid_ = rhs.pid_;
     rhs.pid_ = { 0 };
 }
 
 WD::Process &WD::Process::operator=(WD::Process &&rhs) noexcept {
-	Stop();
+    Stop();
 
-	pid_ = rhs.pid_;
+    pid_ = rhs.pid_;
     rhs.pid_ = { 0 };
 
-	return *this;
+    return *this;
 }
 
 bool WD::Process::Run(const char *name, bool detached_console) {
-	Stop();
+    Stop();
 
     // slow, but i don't care
     std::string _name, executable;
@@ -76,16 +76,16 @@ bool WD::Process::Run(const char *name, bool detached_console) {
         return false;
     }
 
-	int res = posix_spawn(&pid_, executable.c_str(), nullptr, nullptr, argv, environ);
-	return res == 0;
+    int res = posix_spawn(&pid_, executable.c_str(), nullptr, nullptr, argv, environ);
+    return res == 0;
 }
 
 void WD::Process::Stop() {
-	if (pid_) {
+    if (pid_) {
         kill(pid_, SIGUSR1);
 
-		pid_ = { 0 };
-	}
+        pid_ = { 0 };
+    }
 }
 
 int WD::Process::WaitForCompletion() {

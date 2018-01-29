@@ -42,7 +42,7 @@ WD::SharedMemory::SharedMemory(const char *name, size_t size, int flags) : name_
 }
 
 WD::SharedMemory::~SharedMemory() {
-	munmap(p_buf_, size_);
+    munmap(p_buf_, size_);
     close(shm_);
     if (is_owner_) {
         shm_unlink(name_.c_str());
@@ -52,7 +52,7 @@ WD::SharedMemory::~SharedMemory() {
 WD::SharedMemory::SharedMemory(WD::SharedMemory &&rhs) noexcept : name_(std::move(rhs.name_)) {
     size_ = rhs.size_;
     rhs.size_ = 0;
-	is_owner_ = rhs.is_owner_;
+    is_owner_ = rhs.is_owner_;
     rhs.is_owner_ = false;
     shm_ = rhs.shm_;
     rhs.shm_ = -1;
@@ -69,7 +69,7 @@ WD::SharedMemory &WD::SharedMemory::operator=(WD::SharedMemory &&rhs) noexcept {
         }
     }
 
-	name_ = std::move(rhs.name_);
+    name_ = std::move(rhs.name_);
     size_ = rhs.size_;
     rhs.size_ = 0;
     is_owner_ = rhs.is_owner_;

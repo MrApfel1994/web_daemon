@@ -65,7 +65,7 @@ WD::PipeClient::~PipeClient() {
 }
 
 WD::PipeClient::PipeClient(WD::PipeClient &&rhs) noexcept : name_(std::move(rhs.name_)) {
-	fd_ = rhs.fd_;
+    fd_ = rhs.fd_;
     rhs.fd_ = -1;
     addr_ = rhs.addr_;
     rhs.addr_ = { 0 };

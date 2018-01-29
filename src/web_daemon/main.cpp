@@ -10,51 +10,51 @@
 #include "WebView.h"
 
 void sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist){
-	qnr->ignoreSslErrors();
+    qnr->ignoreSslErrors();
 }
 
 int main(int argc, char *argv[]) {
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 
-	QApplication qt_app(argc, argv);
+    QApplication qt_app(argc, argv);
 
-	qt_app.setQuitOnLastWindowClosed(false);
+    qt_app.setQuitOnLastWindowClosed(false);
 
     {
         //QSslConfiguration sslconf = QSslConfiguration::defaultConfiguration();
         //QList<QSslCertificate> cert_list = sslconf.caCertificates();
     }
 
-	
-	std::string app_id = "0";
-	std::string default_url = "http://html5test.com";
+    
+    std::string app_id = "0";
+    std::string default_url = "http://html5test.com";
 
-	if (argc > 1) {
-		app_id = argv[1];
-		if (argc > 2) {
-			default_url = argv[2];
-		}
-	}
+    if (argc > 1) {
+        app_id = argv[1];
+        if (argc > 2) {
+            default_url = argv[2];
+        }
+    }
 
-	WebView web_view;
-	web_view.setAttribute(Qt::WA_DontShowOnScreen);
-	web_view.show();
-	web_view.load(QUrl(default_url.c_str()));
+    WebView web_view;
+    web_view.setAttribute(Qt::WA_DontShowOnScreen);
+    web_view.show();
+    web_view.load(QUrl(default_url.c_str()));
 
 #if defined(QT_OPENSSL) && !defined(QT_NO_OPENSSL)
-	web_view.connect(web_view.page()->networkAccessManager(),
-		SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> &)),
-		SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> &)));
+    web_view.connect(web_view.page()->networkAccessManager(),
+        SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> &)),
+        SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> &)));
 #endif
 
-	WebApp web_app(app_id.c_str(), &web_view);
+    WebApp web_app(app_id.c_str(), &web_view);
 
-	auto thr = std::thread{[&web_app]() { return web_app.Run(); }};
+    auto thr = std::thread{[&web_app]() { return web_app.Run(); }};
 
-	int ret = qt_app.exec();
+    int ret = qt_app.exec();
 
-	std::cout << "Joining thread" << std::endl;
-	thr.join();
+    std::cout << "Joining thread" << std::endl;
+    thr.join();
 
-	return ret;
+    return ret;
 }
