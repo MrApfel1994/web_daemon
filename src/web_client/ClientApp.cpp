@@ -12,7 +12,7 @@ ClientApp::ClientApp() : quit_(false) {
     frame_updated_ = false;
 }
 
-int ClientApp::Init(int w, int h) {
+int ClientApp::Init(int w, int h, const std::string &url) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         return -1;
     }
@@ -37,7 +37,7 @@ int ClientApp::Init(int w, int h) {
     SDL_GL_SetSwapInterval(1);
 
     try {
-        daemon_proc_ = WD::Process{ "web_daemon test_id https://google.com", false };
+        daemon_proc_ = WD::Process{ (std::string("web_daemon test_id ") + url).c_str(), false };
         WD::Process::Sleep(1000);
         pipe_ = WD::PipeClient{ "test_id" };
     } catch (std::runtime_error &) {
@@ -115,9 +115,14 @@ void ClientApp::Frame() {
 }
 
 int ClientApp::Run(const std::vector<std::string> &args) {
-    const int w = 500; const int h = 500;
+    const int w = 1280; const int h = 720;
 
-    if (Init(w, h) < 0) {
+	std::string url = "http://html5test.com";
+	if (!args.empty()) {
+		url = args[0];
+	}
+
+    if (Init(w, h, url) < 0) {
         return -1;
     }
 

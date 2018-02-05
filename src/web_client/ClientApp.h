@@ -36,7 +36,7 @@ public:
     ClientApp();
     ~ClientApp() = default;
 
-    int Init(int w, int h);
+    int Init(int w, int h, const std::string &url);
     void Destroy();
 
     void Frame();
