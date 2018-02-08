@@ -2,7 +2,7 @@
 
 namespace WD {
 namespace PipeServerInternal {
-    const char PIPE_PREFIX[] = "\\\\.\\pipe\\";
+const char PIPE_PREFIX[] = "\\\\.\\pipe\\";
 }
 }
 
@@ -11,8 +11,8 @@ WD::PipeServer::PipeServer(const char *name) : name_(name), handle_(NULL) {
     _name += name_;
 
     handle_ = CreateNamedPipe(_name.c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
-                                PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, 
-                                1, 1024, 1024, 50000, NULL);
+                              PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
+                              1, 1024, 1024, 50000, NULL);
     if (handle_ == INVALID_HANDLE_VALUE) {
         throw std::runtime_error("Cannot create pipe!");
     }

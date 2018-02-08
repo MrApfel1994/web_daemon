@@ -8,8 +8,8 @@
 #include "../Process.h"
 
 namespace {
-    const char msg1[] = "test_message";
-    const char msg2[] = "test_answer";
+const char msg1[] = "test_message";
+const char msg2[] = "test_answer";
 }
 
 void test_pipe_child();
@@ -21,10 +21,10 @@ void test_pipe() {
 
         int time = 0;
         while (time < 10000) {
-            try {
-                pipe = WD::PipeClient{ "TestPipe2134567891" };
-                break;
-            } catch (...) { }
+        try {
+            pipe = WD::PipeClient{ "TestPipe2134567891" };
+            break;
+        } catch (...) { }
 
             WD::Process::Sleep(100);
             time += 100;
@@ -34,7 +34,7 @@ void test_pipe() {
 
         time = 0;
         while (time < 10000) {
-            char in_buf[128];
+        char in_buf[128];
             uint32_t bytes_read = 0;
             if (pipe.Read(&in_buf[0], sizeof(in_buf), &bytes_read)) {
                 require(bytes_read == sizeof(msg1));
@@ -47,7 +47,7 @@ void test_pipe() {
             WD::Process::Sleep(100);
             time += 100;
         }
-        
+
         require(time < 10000);
 
         pr.WaitForCompletion();

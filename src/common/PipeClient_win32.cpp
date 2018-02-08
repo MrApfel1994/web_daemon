@@ -2,7 +2,7 @@
 
 namespace WD {
 namespace PipeClientInternal {
-    const char PIPE_PREFIX[] = "\\\\.\\pipe\\";
+const char PIPE_PREFIX[] = "\\\\.\\pipe\\";
 }
 }
 
@@ -11,8 +11,8 @@ WD::PipeClient::PipeClient(const char *name) : name_(name), handle_(NULL) {
     _name += name_;
 
     handle_ = CreateFile(_name.c_str(), GENERIC_READ | GENERIC_WRITE,
-                            FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
-                            FILE_ATTRIBUTE_NORMAL, NULL);
+                         FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+                         FILE_ATTRIBUTE_NORMAL, NULL);
     if (handle_ == INVALID_HANDLE_VALUE) {
         throw std::runtime_error("Cannot connect to pipe.");
     }

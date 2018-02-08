@@ -14,7 +14,7 @@ class WebView;
 class WebApp : public QObject {
     Q_OBJECT
 public:
-    WebApp(const char *app_id, WebView *web_view);
+    WebApp(const char *app_id, WebView *web_view, std::ostream &log_stream);
     ~WebApp();
 
     WebApp(const WebApp &rhs) = delete;
@@ -22,7 +22,9 @@ public:
 
     int Run();
 
-    void *frame_buf() { return framebuf_mem_.buf(); }
+    void *frame_buf() {
+        return framebuf_mem_.buf();
+    }
 
 private slots:
     void OnLoadStarted();
@@ -46,4 +48,6 @@ private:
 
     std::mutex mtx_;
     std::vector<std::vector<uint8_t>> delayed_messages_;
+
+    std::ostream &log_stream_;
 };
