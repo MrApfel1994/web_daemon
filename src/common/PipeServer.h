@@ -24,10 +24,16 @@ public:
     bool WaitForEvent(int timeout);
 
     enum eState { Reading, Writing };
-    eState state() const { return cur_state_; }
+    eState state() const {
+        return cur_state_;
+    }
 
-    uint32_t bytes_transfered() const { return bytes_transfered_; }
-    void reset() { bytes_transfered_ = 0; }
+    uint32_t bytes_transfered() const {
+        return bytes_transfered_;
+    }
+    void reset() {
+        bytes_transfered_ = 0;
+    }
 
     bool Connect();
 

@@ -46,8 +46,8 @@ int ClientApp::Init(int w, int h, const std::string &url) {
 
     uint8_t buf[WD::MaxMsgLen];
     uint32_t bytes_read = 0;
-    if (pipe_.Read(&buf[0], sizeof(buf), &bytes_read) && 
-        buf[0] == WD::AppStarted && bytes_read == sizeof(WD::AppStartedMsg)) {
+    if (pipe_.Read(&buf[0], sizeof(buf), &bytes_read) &&
+            buf[0] == WD::AppStarted && bytes_read == sizeof(WD::AppStartedMsg)) {
         const auto *msg = (const WD::AppStartedMsg *)buf;
 
         if (msg->protocol != WD::ProtocolVersion) return -1;
@@ -63,7 +63,7 @@ int ClientApp::Init(int w, int h, const std::string &url) {
 
         bytes_read = 0;
         if (pipe_.Read(buf, sizeof(buf), &bytes_read) &&
-            buf[0] == WD::ViewResized && bytes_read == sizeof(WD::ViewResizedMsg)) {
+                buf[0] == WD::ViewResized && bytes_read == sizeof(WD::ViewResizedMsg)) {
             const auto *resp = (const WD::ViewResizedMsg *)buf;
 
             if (resp->result != WD::Success || resp->width != w || resp->height != h) return -1;
@@ -77,7 +77,7 @@ int ClientApp::Init(int w, int h, const std::string &url) {
             } catch (...) {
                 return -1;
             }
-            
+
             pipe_.SetBlocking(false);
 
             //
@@ -115,12 +115,13 @@ void ClientApp::Frame() {
 }
 
 int ClientApp::Run(const std::vector<std::string> &args) {
-    const int w = 1280; const int h = 720;
+    const int w = 1280;
+    const int h = 720;
 
-	std::string url = "http://html5test.com";
-	if (!args.empty()) {
-		url = args[0];
-	}
+    std::string url = "http://html5test.com";
+    if (!args.empty()) {
+        url = args[0];
+    }
 
     if (Init(w, h, url) < 0) {
         return -1;
@@ -170,7 +171,7 @@ void ClientApp::Receive() {
         case WD::ViewResized:
             if (bytes_read == sizeof(WD::ViewResizedMsg)) {
                 const auto *msg = (const WD::ViewResizedMsg *)in_buf;
-                
+
                 remote_width_ = msg->width;
                 remote_height_ = msg->height;
 
@@ -209,7 +210,7 @@ void ClientApp::PollEvents() {
         }
         break;
         case SDL_KEYUP:
-            
+
             break;
         case SDL_MOUSEBUTTONDOWN: {
             WD::InputEventMsg msg = { 0 };
@@ -264,19 +265,21 @@ void ClientApp::PollEvents() {
                 texture_ = SDL_CreateTexture(renderer_, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
                                              e.window.data1, e.window.data2);
 
-                remote_width_ = 0;
-                remote_height_ = 0;
-                framebuf_ = {};
+                if (remote_width_ && remote_height_) {
+                    remote_width_ = 0;
+                    remote_height_ = 0;
+                    framebuf_ = {};
 
-                width_ = (int)e.window.data1;
-                height_ = (int)e.window.data2;
+                    width_ = (int)e.window.data1;
+                    height_ = (int)e.window.data2;
 
-                WD::ResizeViewMsg msg = { 0 };
-                msg.msg_type = WD::ResizeView;
-                msg.width = (uint16_t)width_;
-                msg.height = (uint16_t)height_;
+                    WD::ResizeViewMsg msg = { 0 };
+                    msg.msg_type = WD::ResizeView;
+                    msg.width = (uint16_t)width_;
+                    msg.height = (uint16_t)height_;
 
-                pipe_.Write(&msg, sizeof(msg));
+                    pipe_.Write(&msg, sizeof(msg));
+                }
             }
             break;
         default:

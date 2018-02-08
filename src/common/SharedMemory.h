@@ -29,10 +29,16 @@ public:
 #endif
     }
 
-    const std::string &name() const { return name_; }
-    size_t size() const { return size_; }
+    const std::string &name() const {
+        return name_;
+    }
+    size_t size() const {
+        return size_;
+    }
 
-    void *buf() { return p_buf_; }
+    void *buf() {
+        return p_buf_;
+    }
 private:
     std::string name_;
     size_t size_ = 0;
