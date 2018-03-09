@@ -22,6 +22,8 @@ ENDIF(WIN32)
 set(SOURCE_FILES    main.cpp
                     WebApp.h
                     WebApp.cpp
+					WebPage.h
+					WebPage.cpp
                     WebView.h
                     WebView.cpp)
 

@@ -33,6 +33,7 @@ enum ePgEvType : uint8_t {
     LoadProgress,
     LoadFinished,
     TitleChanged,
+    JsMessage,
 };
 
 enum eFrameReqFlags : uint8_t {
@@ -104,6 +105,11 @@ struct PageEventMsg {
     union {
         char url[254];
         char title[254];
+        struct {
+            char id[10];
+            uint8_t line[4];
+            char msg[240];
+        } js;
     };
 };
 static_assert(sizeof(PageEventMsg) == 256, "!");
@@ -114,4 +120,5 @@ struct PageEventLiteMsg {
     uint8_t progress;
 };
 static_assert(sizeof(PageEventLiteMsg) == 3, "!");
+
 }

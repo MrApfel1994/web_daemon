@@ -47,6 +47,9 @@ public:
         return std::move(updated_regions_);
     }
 
+    QWebPage* page() const;
+
+    void load(const QUrl& url);
 private:
     void *p_framebuf_ = nullptr;
     QPoint prev_scroll_pos_;
@@ -55,5 +58,7 @@ private:
 
     std::mutex mtx_;
     std::vector<QRegion> updated_regions_;
+
+    mutable QWebPage *cur_page_ = nullptr;
 };
 

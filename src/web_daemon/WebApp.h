@@ -14,7 +14,7 @@ class WebView;
 class WebApp : public QObject {
     Q_OBJECT
 public:
-    WebApp(const char *app_id, WebView *web_view, std::ostream &log_stream);
+    WebApp(const char *app_id, WebView *web_view, uint32_t parent_id, std::ostream &log_stream);
     ~WebApp();
 
     WebApp(const WebApp &rhs) = delete;
@@ -32,6 +32,7 @@ private slots:
     void OnLoadFinished(bool result);
     void OnTitleChanged(const QString &title);
     void OnUrlChanged(const QUrl &url);
+    void OnJsConsole(const QString &id, int line, const QString &msg);
 
 private:
     void ProcessMessage(const void *in_buf, uint32_t in_size, void *out_buf, uint32_t &out_size);
@@ -45,6 +46,8 @@ private:
     WD::SharedMemory framebuf_mem_;
 
     WebView *web_view_;
+
+    uint32_t parent_id_;
 
     std::mutex mtx_;
     std::vector<std::vector<uint8_t>> delayed_messages_;

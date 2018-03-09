@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -24,6 +26,9 @@ public:
     int WaitForCompletion();
 
     static void Sleep(int time_ms);
+
+    static uint32_t GetCurrentProcessID();
+    static bool IsStillRunning(uint32_t id);
 private:
 #ifdef _WIN32
     STARTUPINFO si_;

@@ -34,6 +34,8 @@ source_group("src" FILES ${SOURCE_FILES})
 add_executable(web_client ${ALL_SOURCE_FILES})
 target_link_libraries(web_client common ${LIBS})
 
+set_target_properties(web_client PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
+
 add_dependencies(web_client web_daemon)
 
 add_custom_command(TARGET web_client

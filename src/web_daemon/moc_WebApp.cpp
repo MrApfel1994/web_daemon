@@ -18,25 +18,26 @@
 QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_WebApp[] = {
 
-// content:
-    6,       // revision
-    0,       // classname
-    0,    0, // classinfo
-    5,   14, // methods
-    0,    0, // properties
-    0,    0, // enums/sets
-    0,    0, // constructors
-    0,       // flags
-    0,       // signalCount
+ // content:
+       6,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       6,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
 
-// slots: signature, parameters, type, tag, flags
-    8,    7,    7,    7, 0x08,
-    33,   24,    7,    7, 0x08,
-    60,   53,    7,    7, 0x08,
-    87,   81,    7,    7, 0x08,
-    115,  111,    7,    7, 0x08,
+ // slots: signature, parameters, type, tag, flags
+       8,    7,    7,    7, 0x08,
+      33,   24,    7,    7, 0x08,
+      60,   53,    7,    7, 0x08,
+      87,   81,    7,    7, 0x08,
+     115,  111,    7,    7, 0x08,
+     146,  134,    7,    7, 0x08,
 
-    0        // eod
+       0        // eod
 };
 
 static const char qt_meta_stringdata_WebApp[] = {
@@ -44,71 +45,62 @@ static const char qt_meta_stringdata_WebApp[] = {
     "OnLoadProgress(int)\0result\0"
     "OnLoadFinished(bool)\0title\0"
     "OnTitleChanged(QString)\0url\0"
-    "OnUrlChanged(QUrl)\0"
+    "OnUrlChanged(QUrl)\0id,line,msg\0"
+    "OnJsConsole(QString,int,QString)\0"
 };
 
-void WebApp::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a) {
+void WebApp::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
     if (_c == QMetaObject::InvokeMetaMethod) {
         Q_ASSERT(staticMetaObject.cast(_o));
         WebApp *_t = static_cast<WebApp *>(_o);
         switch (_id) {
-        case 0:
-            _t->OnLoadStarted();
-            break;
-        case 1:
-            _t->OnLoadProgress((*reinterpret_cast< int(*)>(_a[1])));
-            break;
-        case 2:
-            _t->OnLoadFinished((*reinterpret_cast< bool(*)>(_a[1])));
-            break;
-        case 3:
-            _t->OnTitleChanged((*reinterpret_cast< const QString(*)>(_a[1])));
-            break;
-        case 4:
-            _t->OnUrlChanged((*reinterpret_cast< const QUrl(*)>(_a[1])));
-            break;
-        default:
-            ;
+        case 0: _t->OnLoadStarted(); break;
+        case 1: _t->OnLoadProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->OnLoadFinished((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 3: _t->OnTitleChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 4: _t->OnUrlChanged((*reinterpret_cast< const QUrl(*)>(_a[1]))); break;
+        case 5: _t->OnJsConsole((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3]))); break;
+        default: ;
         }
     }
 }
 
 const QMetaObjectExtraData WebApp::staticMetaObjectExtraData = {
-    0,  qt_static_metacall
+    0,  qt_static_metacall 
 };
 
 const QMetaObject WebApp::staticMetaObject = {
-    {
-        &QObject::staticMetaObject, qt_meta_stringdata_WebApp,
-        qt_meta_data_WebApp, &staticMetaObjectExtraData
-    }
+    { &QObject::staticMetaObject, qt_meta_stringdata_WebApp,
+      qt_meta_data_WebApp, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &WebApp::getStaticMetaObject() {
-    return staticMetaObject;
-}
+const QMetaObject &WebApp::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *WebApp::metaObject() const {
+const QMetaObject *WebApp::metaObject() const
+{
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *WebApp::qt_metacast(const char *_clname) {
+void *WebApp::qt_metacast(const char *_clname)
+{
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_WebApp))
         return static_cast<void*>(const_cast< WebApp*>(this));
     return QObject::qt_metacast(_clname);
 }
 
-int WebApp::qt_metacall(QMetaObject::Call _c, int _id, void **_a) {
+int WebApp::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
     _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }

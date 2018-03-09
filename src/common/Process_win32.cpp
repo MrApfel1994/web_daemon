@@ -72,3 +72,19 @@ int WD::Process::WaitForCompletion() {
 void WD::Process::Sleep(int time_ms) {
     ::Sleep(time_ms);
 }
+
+uint32_t WD::Process::GetCurrentProcessID() {
+    return (uint32_t)GetProcessId(GetCurrentProcess());
+}
+
+bool WD::Process::IsStillRunning(uint32_t id) {
+    HANDLE handle = OpenProcess(PROCESS_QUERY_INFORMATION, 0, (DWORD)id);
+    DWORD exit_code = 0;
+    if (GetExitCodeProcess(handle, &exit_code)) {
+        CloseHandle(handle);
+        return exit_code == STILL_ACTIVE;
+    } else {
+        CloseHandle(handle);
+        return false;
+    }
+}

@@ -6,22 +6,29 @@
 #include "../Process.h"
 
 void test_process() {
-    require_throws(
-        auto pr = WD::Process{ "non-existing" };
-    );
+    {
+        require_throws(
+            auto pr = WD::Process{ "non-existing" };
+        );
 
-    std::remove("test_file.txt");
+        std::remove("test_file.txt");
 
-    require_nothrow(
-        auto pr = WD::Process{ "test_common --child 0" };
-        require(pr.WaitForCompletion() == 0);
-    );
+        require_nothrow(
+            auto pr = WD::Process{ "test_common --child 0" };
+            require(pr.WaitForCompletion() == 0);
+        );
 
-    std::ifstream in_file("test_file.txt", std::ios::binary);
-    std::string str;
-    std::getline(in_file, str);
+        std::ifstream in_file("test_file.txt", std::ios::binary);
+        std::string str;
+        std::getline(in_file, str);
 
-    require(str == "test_process_child");
+        require(str == "test_process_child");
+    }
+
+    {
+        auto id = WD::Process::GetCurrentProcessID();
+        require(WD::Process::IsStillRunning(id) == true);
+    }
 }
 
 void test_process_child() {

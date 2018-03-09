@@ -1,5 +1,6 @@
 #include "WebApp.h"
 
+#include <algorithm>
 #include <iostream>
 
 #include <QtGui/QApplication>
@@ -7,7 +8,9 @@
 
 #include <common/MsgDef.h>
 #include <common/PipeServer.h>
+#include <common/Process.h>
 
+#include "WebPage.h"
 #include "WebView.h"
 
 #include "moc_WebApp.cpp"
@@ -20,15 +23,22 @@ const char *FRAMEBUF_BASE_NAME = "FrameBuf_";
 #endif
 }
 
-WebApp::WebApp(const char *app_id, WebView *web_view, std::ostream &log_stream)
-    : running_(false), app_id_(app_id), w_(0), h_(0), web_view_(web_view), log_stream_(log_stream) {
+WebApp::WebApp(const char *app_id, WebView *web_view, uint32_t parent_id, std::ostream &log_stream)
+    : running_(false), app_id_(app_id), w_(0), h_(0), web_view_(web_view), parent_id_(parent_id), log_stream_(log_stream) {
     connect(web_view_, SIGNAL(loadStarted()), this, SLOT(OnLoadStarted()));
     connect(web_view_, SIGNAL(loadProgress(int)), this, SLOT(OnLoadProgress(int)));
     connect(web_view_, SIGNAL(loadFinished(bool)), this, SLOT(OnLoadFinished(bool)));
     connect(web_view_, SIGNAL(titleChanged(const QString&)), this, SLOT(OnTitleChanged(const QString&)));
     connect(web_view_, SIGNAL(urlChanged(const QUrl&)), this, SLOT(OnUrlChanged(const QUrl&)));
 
+    auto *page = (WebPage *)web_view_->page();
+    connect(page, SIGNAL(JsConsoleMessage(const QString &, int, const QString &)), this, SLOT(OnJsConsole(const QString &, int, const QString &)));
+
     qRegisterMetaType<QEvent *>("QEvent *");
+
+    if (parent_id_) {
+        log_stream_ << "Parent id is " << parent_id_ << std::endl;
+    }
 }
 
 WebApp::~WebApp() {
@@ -116,7 +126,14 @@ int WebApp::Run() {
                     }
                 }
             } else {
-                //log_stream_ << "!!!!!!!!!!" << std::endl;
+                log_stream_ << "!!!!!!!!!!" << std::endl;
+            }
+
+            if (parent_id_) {
+                if (!WD::Process::IsStillRunning(parent_id_)) {
+                    log_stream_ << "Parent process with id " << parent_id_ << " is dead, exiting..." << std::endl;
+                    running_ = false;
+                }
             }
         }
         log_stream_ << "Exiting loop!" << std::endl;
@@ -353,4 +370,34 @@ void WebApp::OnUrlChanged(const QUrl &url) {
     delayed_messages_.emplace_back(std::move(msg));
 
     log_stream_ << "OnUrlChanged " << str_url << std::endl;
+}
+
+void WebApp::OnJsConsole(const QString &id, int line, const QString &msg_str) {
+    std::vector<uint8_t> msg;
+    msg.resize(sizeof(WD::PageEventMsg), 0);
+
+    auto *p_msg = (WD::PageEventMsg *)msg.data();
+
+    p_msg->msg_type = WD::PageEvent;
+    p_msg->ev_type = WD::JsMessage;
+
+    if (!id.isEmpty()) {
+        const char *_id = id.toLocal8Bit().constData();
+        memcpy(&p_msg->js.id[0], _id, std::min<size_t>(sizeof(p_msg->js.id), strlen(_id) + 1));
+        
+        memcpy(&p_msg->js.line[0], &line, sizeof(line));
+
+        const char *_msg_str = msg_str.toLocal8Bit().constData();
+        memcpy(&p_msg->js.msg[0], _msg_str, std::min<size_t>(sizeof(p_msg->js.msg), strlen(_msg_str) + 1));
+
+        log_stream_ << "[JS]: " << id.toLocal8Bit().constData() << "(" << line << "): " << msg_str.toLocal8Bit().constData() << std::endl;
+    } else {
+        const char *_msg_str = msg_str.toLocal8Bit().constData();
+        memcpy(&p_msg->js.msg[0], _msg_str, std::min<size_t>(sizeof(p_msg->js.msg) - 1, strlen(_msg_str) + 1));
+
+        log_stream_ << "[JS]: " << msg_str.toLocal8Bit().constData() << std::endl;
+    }
+
+    std::lock_guard<std::mutex> _(mtx_);
+    delayed_messages_.emplace_back(std::move(msg));
 }

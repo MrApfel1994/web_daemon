@@ -97,3 +97,11 @@ int WD::Process::WaitForCompletion() {
 void WD::Process::Sleep(int time_ms) {
     usleep((useconds_t)time_ms * 1000);
 }
+
+uint32_t WD::Process::GetCurrentProcessID() {
+    return 0;
+}
+
+bool WD::Process::IsStillRunning(uint32_t id) {
+    return true;
+}

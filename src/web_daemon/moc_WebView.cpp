@@ -18,26 +18,26 @@
 QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_WebView[] = {
 
-// content:
-    6,       // revision
-    0,       // classname
-    0,    0, // classinfo
-    6,   14, // methods
-    0,    0, // properties
-    0,    0, // enums/sets
-    0,    0, // constructors
-    0,       // flags
-    0,       // signalCount
+ // content:
+       6,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       6,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
 
-// methods: signature, parameters, type, tag, flags
-    17,   14,    9,    8, 0x02,
-    56,   39,    8,    8, 0x02,
-    82,   78,    8,    8, 0x02,
-    96,    8,    8,    8, 0x02,
-    111,    8,    8,    8, 0x02,
-    125,    8,    8,    8, 0x02,
+ // methods: signature, parameters, type, tag, flags
+      17,   14,    9,    8, 0x02,
+      56,   39,    8,    8, 0x02,
+      82,   78,    8,    8, 0x02,
+      96,    8,    8,    8, 0x02,
+     111,    8,    8,    8, 0x02,
+     125,    8,    8,    8, 0x02,
 
-    0        // eod
+       0        // eod
 };
 
 static const char qt_meta_stringdata_WebView[] = {
@@ -47,66 +47,52 @@ static const char qt_meta_stringdata_WebView[] = {
     "PageForward()\0PageReload()\0"
 };
 
-void WebView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a) {
+void WebView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
     if (_c == QMetaObject::InvokeMetaMethod) {
         Q_ASSERT(staticMetaObject.cast(_o));
         WebView *_t = static_cast<WebView *>(_o);
         switch (_id) {
-        case 0: {
-            bool _r = _t->ProcessEvent((*reinterpret_cast< QEvent*(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r;
-        }
-        break;
-        case 1:
-            _t->Resize((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< void*(*)>(_a[3])));
-            break;
-        case 2:
-            _t->LoadUrl((*reinterpret_cast< QUrl(*)>(_a[1])));
-            break;
-        case 3:
-            _t->PageBackward();
-            break;
-        case 4:
-            _t->PageForward();
-            break;
-        case 5:
-            _t->PageReload();
-            break;
-        default:
-            ;
+        case 0: { bool _r = _t->ProcessEvent((*reinterpret_cast< QEvent*(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 1: _t->Resize((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< void*(*)>(_a[3]))); break;
+        case 2: _t->LoadUrl((*reinterpret_cast< QUrl(*)>(_a[1]))); break;
+        case 3: _t->PageBackward(); break;
+        case 4: _t->PageForward(); break;
+        case 5: _t->PageReload(); break;
+        default: ;
         }
     }
 }
 
 const QMetaObjectExtraData WebView::staticMetaObjectExtraData = {
-    0,  qt_static_metacall
+    0,  qt_static_metacall 
 };
 
 const QMetaObject WebView::staticMetaObject = {
-    {
-        &QWebView::staticMetaObject, qt_meta_stringdata_WebView,
-        qt_meta_data_WebView, &staticMetaObjectExtraData
-    }
+    { &QWebView::staticMetaObject, qt_meta_stringdata_WebView,
+      qt_meta_data_WebView, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &WebView::getStaticMetaObject() {
-    return staticMetaObject;
-}
+const QMetaObject &WebView::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *WebView::metaObject() const {
+const QMetaObject *WebView::metaObject() const
+{
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *WebView::qt_metacast(const char *_clname) {
+void *WebView::qt_metacast(const char *_clname)
+{
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_WebView))
         return static_cast<void*>(const_cast< WebView*>(this));
     return QWebView::qt_metacast(_clname);
 }
 
-int WebView::qt_metacall(QMetaObject::Call _c, int _id, void **_a) {
+int WebView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
     _id = QWebView::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
