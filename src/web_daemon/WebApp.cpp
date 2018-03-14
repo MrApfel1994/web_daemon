@@ -230,7 +230,9 @@ void WebApp::ProcessMessage(const void *in_buf, uint32_t in_size, void *out_buf,
                     ev = new QWheelEvent{ { 0, 0 }, msg->y, {}, {} };
                 } else if (msg->ev_type == WD::KeyDown) {
                     log_stream_ << "KeyDown " << msg->keycode << std::endl;
-                    ev = new QKeyEvent{ QEvent::KeyPress, msg->keycode, {}, {} };
+                    auto text = (msg->modifiers & Qt::ShiftModifier) ? "" : QKeySequence(msg->keycode).toString().toLower();
+                    if (text.length() > 1) text = "";
+                    ev = new QKeyEvent{ QEvent::KeyPress, msg->keycode, (Qt::KeyboardModifier)msg->modifiers, text };
                 }
 
                 if (ev) {
