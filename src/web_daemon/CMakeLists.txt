@@ -19,13 +19,13 @@ ELSE(WIN32)
     ENDIF(APPLE)
 ENDIF(WIN32)
 
-set(SOURCE_FILES    main.cpp
-                    WebApp.h
-                    WebApp.cpp
-					WebPage.h
-					WebPage.cpp
-                    WebView.h
-                    WebView.cpp)
+set(SOURCE_FILES main.cpp
+                 WebApp.h
+                 WebApp.cpp
+				 WebPage.h
+				 WebPage.cpp
+                 WebView.h
+                 WebView.cpp)
 
 list(APPEND ALL_SOURCE_FILES ${SOURCE_FILES})
 source_group("src" FILES ${SOURCE_FILES})

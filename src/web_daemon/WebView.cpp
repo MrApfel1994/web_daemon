@@ -68,17 +68,17 @@ void WebView::paintEvent(QPaintEvent *ev) {
         p.setRenderHints(renderHints());
         frame->render(&p, ev->region());
 
-        {
+        /*{
             QPainter p(this);
             p.setRenderHints(renderHints());
             frame->render(&p, ev->region());
-        }
+        }*/
     }
 }
 
 QWebPage* WebView::page() const {
     if (!cur_page_) {
-        WebView *that = const_cast<WebView *>(this);
+        auto *that = const_cast<WebView *>(this);
         cur_page_ = new WebPage(that);
         that->setPage(cur_page_);
     }

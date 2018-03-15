@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
         if (argc > 2) {
             default_url = argv[2];
             if (argc > 3) {
-                parent_proc_id = atoi(argv[3]);
+                parent_proc_id = (uint32_t)atoi(argv[3]);
             }
         }
     }
