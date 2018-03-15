@@ -99,9 +99,10 @@ void WD::Process::Sleep(int time_ms) {
 }
 
 uint32_t WD::Process::GetCurrentProcessID() {
-    return 0;
+    auto pid = getpid();
+    return (uint32_t)pid;
 }
 
 bool WD::Process::IsStillRunning(uint32_t id) {
-    return true;
+    return 0 == kill((pid_t)id, 0);
 }

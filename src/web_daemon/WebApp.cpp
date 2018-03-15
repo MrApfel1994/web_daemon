@@ -46,7 +46,7 @@ WebApp::~WebApp() {
 
 int WebApp::Run() {
     try {
-        log_stream_ << "Openging pipe " << app_id_ << std::endl;
+        log_stream_ << "Opening pipe " << app_id_ << std::endl;
         auto pipe = WD::PipeServer{ app_id_.c_str() };
 
         if (!pipe.Connect()) {

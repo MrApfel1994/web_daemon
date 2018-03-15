@@ -27,7 +27,7 @@ void test_process() {
 
     {
         auto id = WD::Process::GetCurrentProcessID();
-        require(WD::Process::IsStillRunning(id) == true);
+        require(WD::Process::IsStillRunning(id));
     }
 }
 
