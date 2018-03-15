@@ -11,6 +11,7 @@ matrix:
         sources:
         - ubuntu-toolchain-r-test
         packages:
+        - gcc-6
         - g++-6
     env: COMPILER=g++-6
 install:
@@ -22,6 +23,10 @@ install:
 - sudo apt-get install libsdl2-dev
 - python download.py
 script:
+- sudo ln -s /usr/bin/gcc-6 /usr/local/bin/gcc
+- sudo ln -s /usr/bin/g++-6 /usr/local/bin/g++
+- export CC=/usr/bin/gcc-6
+- export CXX=/usr/bin/g++-6
 - mkdir build
 - "(cd build && cmake .. && make)"
 - "(cd build/src/common/tests && ./test_common)"
