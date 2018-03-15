@@ -23,7 +23,7 @@ public:
     bool IsAsyncIOComplete();
     bool WaitForEvent(int timeout);
 
-    enum eState { Reading, Writing };
+    enum eState { Reading, Writing, Invalid };
     eState state() const {
         return cur_state_;
     }
@@ -42,7 +42,7 @@ public:
 
 private:
     std::string name_;
-    eState cur_state_;
+    eState cur_state_ = Invalid;
 #ifdef _WIN32
     HANDLE handle_ = INVALID_HANDLE_VALUE;
     OVERLAPPED overlap_;
@@ -51,9 +51,9 @@ private:
     HANDLE event_ = INVALID_HANDLE_VALUE;
 #else
     int fd_ = -1;
-    struct sockaddr_un addr_, cl_addr_;
+    struct sockaddr_un addr_ = {}, cl_addr_ = {};
     uint32_t bytes_transfered_ = 0;
-    char conn_buf[1];
+    char conn_buf[1] = {};
     void *in_buf_ = nullptr;
     uint32_t in_buf_size_ = 0;
     bool pending_io_ = false;

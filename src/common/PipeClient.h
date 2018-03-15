@@ -39,7 +39,7 @@ private:
     HANDLE handle_ = INVALID_HANDLE_VALUE;
 #else
     int fd_ = -1;
-    struct sockaddr_un addr_, srv_addr_;
+    struct sockaddr_un addr_ = {}, srv_addr_ = {};
 #endif
 };
 }
