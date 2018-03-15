@@ -3,19 +3,6 @@ project(web_app)
 
 set(CMAKE_CXX_STANDARD 11)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    if (UNIX)
-       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    else()
-       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -m32")
-       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-       set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -shared-libgcc -shared-libstdc++")
-    endif()
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-  
-endif()
-
 set(SDL_STATIC ON)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
