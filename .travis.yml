@@ -3,6 +3,9 @@ compiler: gcc
 dist: trusty
 env:
 - PACKAGE_VERSION="0.0.*"
+os:
+  - linux
+  - osx
 matrix:
   include:
   - compiler: gcc
@@ -14,14 +17,22 @@ matrix:
         - gcc-6
         - g++-6
     env: COMPILER=g++-6
+before_install:
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update          ; fi
+#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
 install:
-- sudo apt-get install binutils-2.26
-- export PATH=/usr/lib/binutils-2.26/bin:${PATH}
-- sudo apt-get install freeglut3-dev
-- sudo apt-get install libegl1-mesa-dev
-- sudo apt-get install libgles2-mesa-dev
-- sudo apt-get install libsdl2-dev
-- python download.py
+- |
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    sudo apt-get install binutils-2.26;
+    export PATH=/usr/lib/binutils-2.26/bin:${PATH};
+    sudo apt-get install freeglut3-dev;
+    sudo apt-get install libegl1-mesa-dev;
+    sudo apt-get install libgles2-mesa-dev;
+    sudo apt-get install libsdl2-dev;
+  else
+    echo 111
+  fi
+  python download.py
 script:
 - sudo ln -s /usr/bin/gcc-6 /usr/local/bin/gcc
 - sudo ln -s /usr/bin/g++-6 /usr/local/bin/g++
