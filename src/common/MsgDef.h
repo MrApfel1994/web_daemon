@@ -94,11 +94,11 @@ static_assert(sizeof(FrameUpdatedMsg) == 66, "!");
 struct InputEventMsg {
     uint8_t msg_type;
     uint8_t ev_type;
-    int32_t x, y;
+    int32_t x, y, dx, dy;
     int32_t keycode;
     uint32_t modifiers;
 };
-static_assert(sizeof(InputEventMsg) == 20, "!");
+static_assert(sizeof(InputEventMsg) == 28, "!");
 
 struct PageEventMsg {
     uint8_t msg_type;
