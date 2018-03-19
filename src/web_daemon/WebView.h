@@ -42,8 +42,9 @@ public:
         this->reload();
     }
 
+    Q_INVOKABLE void ProcessDelayedRegions();
+
     std::vector<QRegion> StealUpdatedRegions() {
-        std::lock_guard<std::mutex> _(mtx_);
         return std::move(updated_regions_);
     }
 
@@ -56,8 +57,8 @@ private:
     bool frame_requested_ = true;
     std::condition_variable cv_;
 
-    std::mutex mtx_;
     std::vector<QRegion> updated_regions_;
+    std::vector<QRegion> delayed_regions_;
 
     mutable QWebPage *cur_page_ = nullptr;
 };

@@ -109,9 +109,9 @@ void ClientApp::Frame() {
         req.msg_type = WD::FrameRequest;
         req.flags = WD::LockFullHorizontalSpan;
 
-        /*if (pipe_.Write(&req, sizeof(req))) {
+        if (pipe_.Write(&req, sizeof(req))) {
             frame_request_needed_ = false;
-        }*/
+        }
     }
 }
 
@@ -135,7 +135,7 @@ int ClientApp::Run(const std::vector<std::string> &args) {
 
         this->Frame();
 
-        frame_updated_ = framebuf_.buf() != nullptr;
+        //frame_updated_ = framebuf_.buf() != nullptr;
         if (frame_updated_ && width_ == remote_width_ && height_ == remote_height_) {
             SDL_UpdateTexture(texture_, nullptr, framebuf_.buf(), width_ * sizeof(Uint32));
 
@@ -191,6 +191,8 @@ void ClientApp::Receive() {
                 if (!frame_updated_) {
                     frame_request_needed_ = true;
                 }
+
+                
             }
             break;
         default:

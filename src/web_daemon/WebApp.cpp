@@ -181,6 +181,7 @@ void WebApp::ProcessMessage(const void *in_buf, uint32_t in_size, void *out_buf,
             if (in_size == sizeof(WD::FrameRequestMsg)) {
                 const auto *req = (WD::FrameRequestMsg *)in_buf;
 
+                QMetaObject::invokeMethod(web_view_, "ProcessDelayedRegions", Qt::BlockingQueuedConnection);
                 std::vector<QRegion> updated_regions = web_view_->StealUpdatedRegions();
 
                 WD::FrameUpdatedMsg resp = {};
