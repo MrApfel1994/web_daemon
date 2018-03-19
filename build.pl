@@ -42,9 +42,9 @@ sub DownloadFile
 	print ("> call DownloadFile with args: $file_name\n");
 	
 	my $url="";
-	if ($osname eq 'MSWin32')
+	if ($osname eq 'MSWin32' or $osname eq 'msys')
 	{
-		$url="https://docs.google.com/uc?export=download&id=1UFhm5RJe3IjnK9DPxzNvE8VccCg-Zo7c";
+		$url="https://docs.google.com/uc?export=download&id=1lM9fgdOkMmYX5j7AvrsqFnHYyKvt6k9J";
 	}
 	if ($osname eq 'linux')
 	{
