@@ -55,12 +55,16 @@ sub DownloadFile
 		$url="https://docs.google.com/uc?export=download&id=1e7Lg9FkaC2YYDtekwhSw1t1jaVxmnnjT";
 	}
 
+	print "download url is: $url\n";
+	
 	my $ua = LWP::UserAgent->new;
 	my $response = $ua->get($url);
 	die $response->status_line if !$response->is_success;
 	print "HTTP response code was: ", $response->status_line, "\n";
 	my $file = $response->decoded_content( charset => 'none' );
-	getstore($url,$file_name);	
+	getstore($url,$file_name);#
+	
+	sleep(1);
 }
 
 #-----------------------------------------------------------------------
