@@ -121,9 +121,10 @@ sub Build
     {
         #call cmake
         my $CmakeCmd="cmake ..";
-        print ("> $CmakeCmd\n");
-        VerboseMessage("> $CmakeCmd");
-        system($CmakeCmd);
+		my $systemCmd="cd $buildDir && $CmakeCmd";
+        print ("> $systemCmd\n");
+        VerboseMessage("> $systemCmd");
+        system($systemCmd);
 
         #call make
         my $MakeCmd="make";
