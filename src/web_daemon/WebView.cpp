@@ -23,7 +23,7 @@ void WebView::paintEvent(QPaintEvent *ev) {
     if (r.x() + r.width() > sz.width()) return;
     if (r.y() + r.height() > sz.height()) return;
 
-    if (delayed_regions_.size() < 16) {
+    if (delayed_regions_.size() < 64) {
         delayed_regions_.push_back(ev->region());
     }
 }
@@ -41,10 +41,12 @@ void WebView::ProcessDelayedRegions() {
 
         QPoint scroll_pos = frame->scrollPosition();
         if (scroll_pos != prev_scroll_pos_) {
-            frame->render(&p, { 0, 0, (int)sz.width(), (int)sz.height() });
+            prev_scroll_pos_ = scroll_pos;
+
+            frame->render(&p, { 0, 0, sz.width(), sz.height() });
 
             updated_regions_.clear();
-            updated_regions_.emplace_back(0, 0, (int)sz.width(), (int)sz.height());
+            updated_regions_.emplace_back(0, 0, sz.width(), sz.height());
         } else {
             for (const auto &r : delayed_regions_) {
                 frame->render(&p, r);
