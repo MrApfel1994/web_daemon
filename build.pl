@@ -9,8 +9,10 @@ use Class::Struct;
 use FindBin qw($Bin);
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use LWP::Simple qw(getstore);
+use LWP::ConnCache;
 use LWP::UserAgent;
 use File::Fetch;
+use File::Copy;
 
 #-----------------------------------------------------------------------
 # check for OS
@@ -35,36 +37,89 @@ for $arg (@ARGV)
 #-----------------------------------------------------------------------
 # download zip file
 #-----------------------------------------------------------------------
-sub DownloadFile
+sub DownloadFileFromGoogleDocs
 {
     my ($file_name)=@_;
 
-	print ("> call DownloadFile with args: $file_name\n");
-	
-	my $url="";
-	if ($osname eq 'MSWin32' or $osname eq 'msys')
-	{
-		$url="https://docs.google.com/uc?export=download&id=1lM9fgdOkMmYX5j7AvrsqFnHYyKvt6k9J";
-	}
-	if ($osname eq 'linux')
-	{
-		$url="https://docs.google.com/uc?export=download&id=1vjiU9jbtFgJBwWypQ_JPrF2lY3GUqb_s";
-	}
-	if ($osname eq 'darwin')
-	{
-		$url="https://docs.google.com/uc?export=download&id=1e7Lg9FkaC2YYDtekwhSw1t1jaVxmnnjT";
-	}
+    print ("> call DownloadFile with args: $file_name\n");
 
-	print "download url is: $url\n";
-	
-	my $ua = LWP::UserAgent->new;
-	my $response = $ua->get($url);
-	die $response->status_line if !$response->is_success;
-	print "HTTP response code was: ", $response->status_line, "\n";
-	my $file = $response->decoded_content( charset => 'none' );
-	getstore($url,$file_name);#
-	
-	sleep(1);
+    my $url="";
+    if ($osname eq 'MSWin32' or $osname eq 'msys')
+    {
+        $url="https://docs.google.com/uc?export=download&id=1lM9fgdOkMmYX5j7AvrsqFnHYyKvt6k9J";
+    }
+    if ($osname eq 'linux')
+    {
+        $url="https://docs.google.com/uc?export=download&id=1vjiU9jbtFgJBwWypQ_JPrF2lY3GUqb_s";
+    }
+    if ($osname eq 'darwin')
+    {
+        $url="https://docs.google.com/uc?export=download&id=1e7Lg9FkaC2YYDtekwhSw1t1jaVxmnnjT";
+    }
+
+    print "download url is: $url\n";
+
+    my $confirm_token = "None";
+    my $cache = LWP::ConnCache->new;
+    $cache->total_capacity(2); # Cache up to 2 connections
+    my $ua = LWP::UserAgent->new(conn_cache => $cache);
+    my $response = $ua->get($url);
+
+    print "HTTP response code was: ", $response->status_line, "\n";
+    if ($response->is_success)
+    {
+        # check header for content-type 
+        $type = $response->content_type( );
+        print "content type: $type\n";
+        if ($type eq "text/html" )
+        {
+            print "confirmation is needed -> load confirmation link from respons and proceed with download \n";		
+            my $buffer = $response->content();
+            my $indexOfConfirmStr = index($buffer, "confirm=");
+            if ($indexOfConfirmStr >= 0)
+            {
+                print "indexOfConfirmStr: $indexOfConfirmStr \n";
+                my $indexOfEndConfirmStr = index($buffer, "&", $indexOfConfirmStr);
+                if ($indexOfEndConfirmStr >= 0)
+                {
+                    print "indexOfEndConfirmStr: $indexOfEndConfirmStr \n";
+                    # extract token
+                    $confirm_token = substr($buffer, $indexOfConfirmStr, $indexOfEndConfirmStr-$indexOfConfirmStr);
+                    print "confirm_token: $confirm_token \n";
+                }
+            }
+        }
+
+        if($confirm_token eq "None")
+        {
+            getstore($url,$file_name);
+        }
+        if($confirm_token ne "None")
+        {
+            my $indexOfId = index($url, "&id=");
+            print "indexOfId: $indexOfId \n";
+            my $newUrl = join "",substr($url, 0, $indexOfId),"&",$confirm_token,substr($url, $indexOfId);
+            print "newUrl: $newUrl \n";
+
+            my $newresponse = $ua->get($newUrl);
+            print "HTTP response code was: ", $newresponse->status_line, "\n";
+            if ($newresponse->is_success)
+            {
+                $type = $newresponse->content_type( );
+                print "content type: $type\n";
+                if ($type ne "text/html" )
+                {
+                    getstore($newUrl,$file_name);
+                }
+                else
+                {
+                    print "not possible to download file because manual confirmation needed.\n";
+                }
+            }
+        }
+    }
+
+    sleep(1);
 }
 
 #-----------------------------------------------------------------------
@@ -72,15 +127,15 @@ sub DownloadFile
 #-----------------------------------------------------------------------
 sub UnzipFile
 {
-	my ($file_name, $unzip_dest) = @_;
-	print ("> call UnzipFile with args: $file_name $unzip_dest\n");
-	my $zip = Archive::Zip->new();
-	unless ( $zip->read($file_name) == AZ_OK )
-	{
-		die 'read error';
-	}
+    my ($file_name, $unzip_dest) = @_;
+    print ("> call UnzipFile with args: $file_name $unzip_dest\n");
+    my $zip = Archive::Zip->new();
+    unless ( $zip->read($file_name) == AZ_OK )
+    {
+        die 'read error';
+    }
 
-	$zip->extractTree("","$unzip_dest");
+    $zip->extractTree("","$unzip_dest");
 }
 
 #-----------------------------------------------------------------------
@@ -92,9 +147,21 @@ sub Build
     #print ("> $pythonDownloadCmd\n");
     #VerboseMessage("> $pythonDownloadCmd");
     #system($pythonDownloadCmd);
-	DownloadFile("$scriptDir/libs.zip");
-	UnzipFile("$scriptDir/libs.zip", "$scriptDir/src/");
-	unlink "$scriptDir/libs.zip";
+
+    my $dstFile = ToOsPath("$scriptDir\\libs.zip");
+    if ($osname eq 'MSWin32' or $osname eq 'msys')
+    {
+        #for windows we copy the file from our \\LUMEN\MA server
+        my $srcFile = "\\\\Lumen\\ma\\Software\\Projekte\\webdaemon_libs\\win_libs.zip";
+        print ("> copy($srcFile, $dstFile)\n");
+        copy($srcFile, $dstFile) or die "Copy Faild: $!";
+    }
+    else
+    {
+        DownloadFileFromGoogleDocs($dstFile);
+    }
+    UnzipFile($dstFile, ToOsPath("$scriptDir\\src\\"));
+    unlink $dstFile;
 
     # create build directory
     my $directory = "build";
@@ -102,39 +169,54 @@ sub Build
     {
         die "Unable to create $directory\n";
     }
-	print ("scriptDir > $scriptDir\n");
-	
-    my $buildDir="$scriptDir/$directory";
-	
+    print ("scriptDir > $scriptDir\n");
+
+    my $buildDir=ToOsPath("$scriptDir\\$directory\\");
+
     if ($osname eq 'MSWin32')
     {
         #call cmake
         my $CmakeCmd='cmake .. -G "Visual Studio 14 2015 Win64"';
-		my $systemCmd="cd $buildDir && $CmakeCmd";
+        my $systemCmd="cd $buildDir && $CmakeCmd";
         print ("> $systemCmd\n");
         VerboseMessage("> $systemCmd");
         system($systemCmd);
 
         #call Visual Studio to build project
+        #my $msbuildPath=ToOsPath("C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe");
+        #my $VSBuildCmd="'$msbuildPath' /m /p:configuration=Release build\\ALL_BUILD.vcxproj";
         my $VSBuildCmd='"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" /m /p:configuration=Release build\ALL_BUILD.vcxproj';
         print ("> $VSBuildCmd\n");
         VerboseMessage("> $VSBuildCmd");
         system($VSBuildCmd);
+
+        my $upxPath=ToOsPath("src\\libs\\upx.exe");
+        my $finishCmd="$upxPath --best web_daemon.exe";
+        print ("> $finishCmd\n");
+        VerboseMessage("> $finishCmd");
+        system($finishCmd);
     }
     else
     {
         #call cmake
         my $CmakeCmd="cmake ..";
-		my $systemCmd="cd $buildDir && $CmakeCmd";
+        my $systemCmd="cd $buildDir && $CmakeCmd";
         print ("> $systemCmd\n");
         VerboseMessage("> $systemCmd");
         system($systemCmd);
 
         #call make
         my $MakeCmd="make";
-        print ("> $MakeCmd\n");
-        VerboseMessage("> $MakeCmd");
-        system($MakeCmd);
+        $systemCmd="cd $buildDir && $MakeCmd";
+        print ("> $systemCmd\n");
+        VerboseMessage("> $systemCmd");
+        system($systemCmd);
+
+        my $upxPath=ToOsPath(".\\src\\libs\\upx");
+        my $finishCmd="$upxPath --best web_daemon";
+        print ("> $finishCmd\n");
+        VerboseMessage("> $finishCmd");
+        system($finishCmd);
     }
 }
 
@@ -147,4 +229,13 @@ sub VerboseMessage()
     }
 }
 
-
+sub ToOsPath()
+{
+    my ($path) = @_;
+    if ($osIsLinux==0)
+    {
+        $path =~ s/^\/([a-zA-Z])/$1:/;
+        $path =~ s/\//\\/g;
+    }
+    return $path;
+}
