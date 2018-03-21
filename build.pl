@@ -148,7 +148,7 @@ sub Build
     #VerboseMessage("> $pythonDownloadCmd");
     #system($pythonDownloadCmd);
 
-    my $dstFile = ToOsPath("$scriptDir\\libs.zip");
+    my $dstFile = ToOsPath("$scriptDir/libs.zip");
     if ($osname eq 'MSWin32' or $osname eq 'msys')
     {
         #for windows we copy the file from our \\LUMEN\MA server
@@ -160,7 +160,7 @@ sub Build
     {
         DownloadFileFromGoogleDocs($dstFile);
     }
-    UnzipFile($dstFile, ToOsPath("$scriptDir\\src\\"));
+    UnzipFile($dstFile, ToOsPath("$scriptDir/src/"));
     unlink $dstFile;
 
     # create build directory
@@ -170,7 +170,7 @@ sub Build
         die "Unable to create $directory\n";
     }
 
-    my $buildDir=ToOsPath("$scriptDir\\$directory\\");
+    my $buildDir=ToOsPath("$scriptDir/$directory/");
     print ("buildDir > $buildDir\n");
 
     if ($osname eq 'MSWin32' or $osname eq 'msys')
@@ -190,7 +190,7 @@ sub Build
         VerboseMessage("> $VSBuildCmd");
         system($VSBuildCmd);
 
-        my $upxPath=ToOsPath("src\\libs\\upx.exe");
+        my $upxPath=ToOsPath("src/libs/upx.exe");
         my $finishCmd="$upxPath --best web_daemon.exe";
         print ("> $finishCmd\n");
         VerboseMessage("> $finishCmd");
@@ -212,8 +212,8 @@ sub Build
         VerboseMessage("> $systemCmd");
         system($systemCmd);
 
-        my $upxPath=ToOsPath(".\\src\\libs\\upx");
-        my $webDaemonBinaryPath=".\\web_daemon";
+        my $upxPath=ToOsPath("./src/libs/upx");
+        my $webDaemonBinaryPath=ToOsPath("./web_daemon");
         my $finishCmd="$upxPath --best $webDaemonBinaryPath";
         print ("> $finishCmd\n");
         VerboseMessage("> $finishCmd");
