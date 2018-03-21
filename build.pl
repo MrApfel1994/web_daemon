@@ -169,11 +169,11 @@ sub Build
     {
         die "Unable to create $directory\n";
     }
-    print ("scriptDir > $scriptDir\n");
 
     my $buildDir=ToOsPath("$scriptDir\\$directory\\");
+    print ("buildDir > $buildDir\n");
 
-    if ($osname eq 'MSWin32')
+    if ($osname eq 'MSWin32' or $osname eq 'msys')
     {
         #call cmake
         my $CmakeCmd='cmake .. -G "Visual Studio 14 2015 Win64"';
@@ -213,7 +213,8 @@ sub Build
         system($systemCmd);
 
         my $upxPath=ToOsPath(".\\src\\libs\\upx");
-        my $finishCmd="$upxPath --best web_daemon";
+        my $webDaemonBinaryPath=".\\web_daemon";
+        my $finishCmd="$upxPath --best $webDaemonBinaryPath";
         print ("> $finishCmd\n");
         VerboseMessage("> $finishCmd");
         system($finishCmd);
@@ -232,7 +233,7 @@ sub VerboseMessage()
 sub ToOsPath()
 {
     my ($path) = @_;
-    if ($osIsLinux==0)
+    if ($osname ne 'linux')
     {
         $path =~ s/^\/([a-zA-Z])/$1:/;
         $path =~ s/\//\\/g;
