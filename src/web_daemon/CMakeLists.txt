@@ -9,7 +9,7 @@ find_library(SYSCONFIG SystemConfiguration)
 find_library(SEQURITY Security)
 
 IF(WIN32)
-	set(LIBS QtCore QtGui QtNetwork QtWebKit Imm32 Mincore Shlwapi winmm Ws2_32 version)
+	set(LIBS QtCore QtGui QtNetwork QtMultimedia QtWebKit Imm32 Mincore Shlwapi winmm Ws2_32 version)
 ELSE(WIN32)
     IF(APPLE)
         add_definitions(-DQT_MAC_USE_COCOA)
