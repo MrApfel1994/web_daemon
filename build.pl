@@ -152,9 +152,14 @@ sub Build
     if ($osname eq 'MSWin32' or $osname eq 'msys')
     {
         #for windows we copy the file from our \\LUMEN\MA server
-        my $srcFile = "\\\\Lumen\\ma\\Software\\Projekte\\webdaemon_libs\\win_libs.zip";
+        my $srcFile = "\\\\malighting\\ma\\Software\\Projekte\\webdaemon_libs\\win_libs.zip";
         print ("> copy($srcFile, $dstFile)\n");
-        copy($srcFile, $dstFile) or die "Copy Faild: $!";
+        unless(copy($srcFile, $dstFile))
+        {
+            #network path was not available -> try to access path via network-drive (normally the case for build server)
+            my $netSrcFile = ToOsPath("S:/Projekte/webdaemon_libs/win_libs.zip");
+            copy($netSrcFile, $dstFile) or die "Copy Faild: $!";
+        }
     }
     else
     {
