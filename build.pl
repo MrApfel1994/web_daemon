@@ -199,7 +199,7 @@ sub Build
         my $finishCmd="$upxPath --best web_daemon.exe";
         print ("> $finishCmd\n");
         VerboseMessage("> $finishCmd");
-        system($finishCmd);
+        #system($finishCmd);
     }
     else
     {
@@ -224,7 +224,7 @@ sub Build
         my $finishCmd="$upxPath --best $webDaemonBinaryPath";
         print ("> $finishCmd\n");
         VerboseMessage("> $finishCmd");
-        system($finishCmd);
+        #system($finishCmd);
     }
 }
 
