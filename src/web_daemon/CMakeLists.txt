@@ -15,7 +15,7 @@ ELSE(WIN32)
         add_definitions(-DQT_MAC_USE_COCOA)
         set(LIBS QtWebKit QtGui QtNetwork QtCore z ${CORE_SERVICES} ${APP_SERVICES} ${CARBON} ${APPKIT} ${SYSCONFIG} ${SEQURITY})
     ELSE(APPLE)
-        set(LIBS QtWebKit QtGui QtNetwork QtCore X11 SM ICE glib-2.0 Xrandr Xrender Xcursor Xfixes Xext Xinerama Xi freetype pthread dl)
+        set(LIBS QtWebKit QtGui QtNetwork QtCore X11 SM ICE glib-2.0 Xrandr Xrender Xcursor Xfixes Xext Xinerama Xi freetype pthread dl fontconfig crypto ssl)
     ENDIF(APPLE)
 ENDIF(WIN32)
 
