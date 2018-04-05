@@ -39,6 +39,8 @@ WebApp::WebApp(const char *app_id, WebView *web_view, uint32_t parent_id, std::o
     if (parent_id_) {
         log_stream_ << "Parent id is " << parent_id_ << std::endl;
     }
+
+    web_view_->setZoomFactor(1.25f);
 }
 
 WebApp::~WebApp() {
