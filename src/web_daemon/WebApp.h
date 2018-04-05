@@ -33,6 +33,7 @@ private slots:
     void OnTitleChanged(const QString &title);
     void OnUrlChanged(const QUrl &url);
     void OnJsConsole(const QString &id, int line, const QString &msg);
+    void OnZoomFactorChange(float factor);
 
 private:
     void ProcessMessage(const void *in_buf, uint32_t in_size, void *out_buf, uint32_t &out_size);

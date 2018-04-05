@@ -41,6 +41,9 @@ public:
     Q_INVOKABLE void PageReload() {
         this->reload();
     }
+    Q_INVOKABLE void ChangeZoomFactor(float fac) {
+        this->setZoomFactor(fac);
+    }
 
     Q_INVOKABLE void ProcessDelayedRegions();
 

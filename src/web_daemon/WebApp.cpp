@@ -255,6 +255,12 @@ void WebApp::ProcessMessage(const void *in_buf, uint32_t in_size, void *out_buf,
                     QMetaObject::invokeMethod(web_view_, "PageForward", Qt::QueuedConnection);
                 } else if (msg->ev_type == WD::PageReload) {
                     QMetaObject::invokeMethod(web_view_, "PageReload", Qt::QueuedConnection);
+                } else if (msg->ev_type == WD::ZoomFactorChange) {
+                    log_stream_ << "ZoomFactorChange " << msg->zoom_factor << std::endl;
+                    float zoom_factor = 1.0f + msg->zoom_factor * 0.125f;
+                    if (zoom_factor < 1.0f) zoom_factor = 1.0f;
+                    else if (zoom_factor > 8.0f) zoom_factor = 8.0f;
+                    QMetaObject::invokeMethod(web_view_, "ChangeZoomFactor", Qt::QueuedConnection, Q_ARG(float, zoom_factor));
                 }
             }
         }
@@ -403,4 +409,7 @@ void WebApp::OnJsConsole(const QString &id, int line, const QString &msg_str) {
 
     std::lock_guard<std::mutex> _(mtx_);
     delayed_messages_.emplace_back(std::move(msg));
+}
+
+void WebApp::OnZoomFactorChange(float factor) {
 }

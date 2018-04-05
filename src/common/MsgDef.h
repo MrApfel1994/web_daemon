@@ -21,6 +21,7 @@ enum eEvType : uint8_t {
     MouseUp,
     KeyDown,
     KeyUp,
+    ZoomFactorChange,
 };
 
 enum ePgEvType : uint8_t {
@@ -111,6 +112,7 @@ struct PageEventMsg {
             uint8_t line[4];
             char msg[240];
         } js;
+        uint8_t zoom_factor; // fixed point number, conversion: (1.0f + zoom_factor * 0.125f)
     };
 };
 static_assert(sizeof(PageEventMsg) == 256, "!");

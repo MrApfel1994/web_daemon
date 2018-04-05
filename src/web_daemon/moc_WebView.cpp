@@ -22,7 +22,7 @@ static const uint qt_meta_data_WebView[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,7 +36,8 @@ static const uint qt_meta_data_WebView[] = {
       96,    8,    8,    8, 0x02,
      111,    8,    8,    8, 0x02,
      125,    8,    8,    8, 0x02,
-     138,    8,    8,    8, 0x02,
+     142,  138,    8,    8, 0x02,
+     166,    8,    8,    8, 0x02,
 
        0        // eod
 };
@@ -45,8 +46,8 @@ static const char qt_meta_stringdata_WebView[] = {
     "WebView\0\0bool\0ev\0ProcessEvent(QEvent*)\0"
     "w,h,new_framebuf\0Resize(int,int,void*)\0"
     "url\0LoadUrl(QUrl)\0PageBackward()\0"
-    "PageForward()\0PageReload()\0"
-    "ProcessDelayedRegions()\0"
+    "PageForward()\0PageReload()\0fac\0"
+    "ChangeZoomFactor(float)\0ProcessDelayedRegions()\0"
 };
 
 void WebView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -62,7 +63,8 @@ void WebView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 3: _t->PageBackward(); break;
         case 4: _t->PageForward(); break;
         case 5: _t->PageReload(); break;
-        case 6: _t->ProcessDelayedRegions(); break;
+        case 6: _t->ChangeZoomFactor((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 7: _t->ProcessDelayedRegions(); break;
         default: ;
         }
     }
@@ -100,9 +102,9 @@ int WebView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
