@@ -6,7 +6,8 @@
 
 #include <QtCore/QThread>
 #include <QtGui/QWheelEvent>
-#include <QtWebKit/QWebView>
+#include <QtWidgets/QLayout>
+#include <QtWebKitWidgets/QWebView>
 
 class WebView : public QWebView {
     Q_OBJECT
@@ -27,7 +28,9 @@ public:
     }
     Q_INVOKABLE void Resize(int w, int h, void *new_framebuf) {
         p_framebuf_ = new_framebuf;
-        this->resize(w, h);
+        if (w != 0 && h != 0) {
+            this->resize(w, h);
+        }
     }
     Q_INVOKABLE void LoadUrl(QUrl url) {
         this->load(url);

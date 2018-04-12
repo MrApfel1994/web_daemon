@@ -1,7 +1,5 @@
 
-#include <QtGui/QApplication>
-//#include <QtNetwork/QsslConfiguration>
-#include <QtNetwork/QNetworkReply>
+#include <QtWidgets/QApplication>
 
 #include <fstream>
 #include <iostream>
@@ -10,21 +8,11 @@
 #include "WebApp.h"
 #include "WebView.h"
 
-void sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
-    qnr->ignoreSslErrors();
-}
-
 int main(int argc, char *argv[]) {
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 
     QApplication qt_app(argc, argv);
     qt_app.setQuitOnLastWindowClosed(true);
-
-    {
-        //QSslConfiguration sslconf = QSslConfiguration::defaultConfiguration();
-        //QList<QSslCertificate> cert_list = sslconf.caCertificates();
-    }
-
 
     std::string app_id = "0";
     std::string default_url = "http://html5test.com";

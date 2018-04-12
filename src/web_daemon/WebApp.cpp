@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QWheelEvent>
 
 #include <common/MsgDef.h>
@@ -222,15 +222,15 @@ void WebApp::ProcessMessage(const void *in_buf, uint32_t in_size, void *out_buf,
                 QEvent *ev = nullptr;
 
                 if (msg->ev_type == WD::MouseMove) {
-                    ev = new QMouseEvent{ QEvent::MouseMove, { msg->x, msg->y }, {}, {}, {} };
+                    ev = new QMouseEvent{ QEvent::MouseMove, { (qreal)msg->x, (qreal)msg->y }, {}, {}, {} };
                 } else if (msg->ev_type == WD::MouseDown) {
                     log_stream_ << "MouseDown " << msg->x << " " << msg->y << std::endl;
-                    ev = new QMouseEvent{ QEvent::MouseButtonPress, { msg->x, msg->y }, Qt::LeftButton, {}, {} };
+                    ev = new QMouseEvent{ QEvent::MouseButtonPress, { (qreal)msg->x, (qreal)msg->y }, Qt::LeftButton, {}, {} };
                 } else if (msg->ev_type == WD::MouseUp) {
                     log_stream_ << "MouseUp " << msg->x << " " << msg->y << std::endl;
-                    ev = new QMouseEvent{ QEvent::MouseButtonRelease, { msg->x, msg->y }, Qt::LeftButton, {}, {} };
+                    ev = new QMouseEvent{ QEvent::MouseButtonRelease, { (qreal)msg->x, (qreal)msg->y }, Qt::LeftButton, {}, {} };
                 } else if (msg->ev_type == WD::MouseWheel) {
-                    ev = new QWheelEvent{ { msg->x, msg->y }, msg->dy, {}, {} };
+                    ev = new QWheelEvent{ { (qreal)msg->x, (qreal)msg->y }, msg->dy, {}, {} };
                 } else if (msg->ev_type == WD::KeyDown) {
                     log_stream_ << "KeyDown " << msg->keycode << std::endl;
                     auto text = (msg->modifiers & Qt::ShiftModifier) ? "" : QKeySequence(msg->keycode).toString().toLower();

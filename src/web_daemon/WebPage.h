@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QtWebKit/QWebPage>
+#include <QtWebKitWidgets/QWebPage>
 
 class WebPage : public QWebPage {
     Q_OBJECT

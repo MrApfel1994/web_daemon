@@ -4,7 +4,7 @@
 
 #include <QtCore/QFile>
 #include <QtGui/QPaintEvent>
-#include <QtWebKit/QWebFrame>
+#include <QtWebKitWidgets/QWebFrame>
 
 #include "WebPage.h"
 
