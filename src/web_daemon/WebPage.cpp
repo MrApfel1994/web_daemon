@@ -11,3 +11,7 @@ void WebPage::javaScriptConsoleMessage(const QString& message, int lineNumber, c
 
     QWebPage::javaScriptConsoleMessage(message, lineNumber, sourceID);
 }
+
+void WebPage::javaScriptAlert(QWebFrame *originatingFrame, const QString& msg) {
+    emit JsConsoleMessage("Alert", 0, msg);
+}

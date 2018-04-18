@@ -1,5 +1,6 @@
 
 #include <QtWidgets/QApplication>
+#include <QtWebKitWidgets/QWebInspector>
 
 #include <fstream>
 #include <iostream>
@@ -32,6 +33,12 @@ int main(int argc, char *argv[]) {
     web_view.setAttribute(Qt::WA_DontShowOnScreen);
     web_view.show();
     web_view.load(QUrl(default_url.c_str()));
+
+    /*web_view.page()->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+
+    QWebInspector inspector;
+    inspector.setPage(web_view.page());
+    inspector.setVisible(true);*/
 
 #if defined(QT_OPENSSL) && !defined(QT_NO_OPENSSL)
     web_view.connect(web_view.page()->networkAccessManager(),
