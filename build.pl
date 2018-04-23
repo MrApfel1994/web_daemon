@@ -164,7 +164,7 @@ sub Build
     elsif ($osname eq 'linux')
     {
         #for linux we also copy the file from our \\LUMEN\MA server
-        $srcFile = "\\\\malighting\\ma\\Software\\Projekte\\webdaemon_libs\\lin_libs.zip";
+        $srcFile = "file://malighting/ma/Software/Projekte/webdaemon_libs/lin_libs.zip";
         print ("> copy($srcFile, $dstFile)\n");
         unless(copy($srcFile, $dstFile))
         {
