@@ -166,7 +166,7 @@ sub Build
         #for linux we also copy the file from our MA server (wbb.malighting.de) -> ma dir from server should be mounted to /media/ma_server/
         $srcFile = "/media/ma_server/Software/Projekte/webdaemon_libs/lin_libs.zip";
         print ("> copy($srcFile, $dstFile)\n");
-        die "Copy Failed: $!\n" unless($remote->copy($srcFile, $dstFile));
+        die "Copy Failed: $!\n" unless(copy($srcFile, $dstFile));
     }
     else
     {
