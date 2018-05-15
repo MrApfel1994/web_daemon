@@ -2,6 +2,9 @@
 #include <QtWidgets/QApplication>
 #include <QtWebKitWidgets/QWebInspector>
 
+#include <QtCore/QtPlugin>
+#include <QtNetwork/QNetworkReply>
+
 #include <fstream>
 #include <iostream>
 #include <thread>
@@ -9,14 +12,26 @@
 #include "WebApp.h"
 #include "WebView.h"
 
-int main(int argc, char *argv[]) {
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
+#ifdef __linux__
+Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
 
+void gst_load__default_plugins();
+#endif
+
+
+
+int main(int argc, char *argv[]) {
+#ifdef __linux__
+    gst_load__default_plugins();
+#endif
+    
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
+    
     QApplication qt_app(argc, argv);
     qt_app.setQuitOnLastWindowClosed(true);
 
     std::string app_id = "0";
-    std::string default_url = "http://html5test.com";
+    std::string default_url = "https://www.quirksmode.org/html5/tests/video.html";
     uint32_t parent_proc_id = 0;
 
     if (argc > 1) {
@@ -28,23 +43,21 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    
+    QWebSettings::globalSettings()->setAttribute(QWebSettings::WebGLEnabled, true);
+    QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
 
     WebView web_view;
     web_view.setAttribute(Qt::WA_DontShowOnScreen);
     web_view.show();
     web_view.load(QUrl(default_url.c_str()));
-
-    /*web_view.page()->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-
-    QWebInspector inspector;
-    inspector.setPage(web_view.page());
-    inspector.setVisible(true);*/
-
-#if defined(QT_OPENSSL) && !defined(QT_NO_OPENSSL)
-    web_view.connect(web_view.page()->networkAccessManager(),
-                     SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> &)),
-                     SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> &)));
-#endif
+    
+    QObject::connect(web_view.page()->networkAccessManager(),
+                     (void (QNetworkAccessManager::*)(QNetworkReply *, const QList<QSslError> &))&QNetworkAccessManager::sslErrors,
+                     [](QNetworkReply *r, const QList<QSslError> &errors){
+                         //for (const auto &e : errors) std::cout << e.errorString().toUtf8().constData() << std::endl;
+                         r->ignoreSslErrors();
+                     });
 
     auto log_file = std::ofstream{ app_id + "_log.txt", std::ios::binary };
 

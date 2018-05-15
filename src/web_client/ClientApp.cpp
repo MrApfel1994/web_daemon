@@ -119,7 +119,7 @@ int ClientApp::Run(const std::vector<std::string> &args) {
     const int w = 1280;
     const int h = 720;
 
-    std::string url = "http://html5test.com";
+    std::string url = "https://www.quirksmode.org/html5/tests/video.html";
     if (!args.empty()) {
         url = args[0];
     }

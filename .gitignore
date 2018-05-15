@@ -3,6 +3,8 @@ build*
 src/libs*
 src/.DS_Store
 check*
-web_client*
-web_daemon*
+/web_client
+/web_daemon
+web_client.exe
+web_daemon.exe
 libs.zip

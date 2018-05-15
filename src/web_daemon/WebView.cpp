@@ -26,6 +26,10 @@ void WebView::paintEvent(QPaintEvent *ev) {
     if (delayed_regions_.size() < 64) {
         delayed_regions_.push_back(ev->region());
     }
+    
+    /*QPainter p(this);
+    p.setRenderHints(renderHints());
+    frame->render(&p, ev->region());*/
 }
 
 void WebView::ProcessDelayedRegions() {
@@ -38,6 +42,7 @@ void WebView::ProcessDelayedRegions() {
         QImage img(p_buf, sz.width(), sz.height(), BYTES_PER_PIXEL * sz.width(), QImage::Format_ARGB32);
         QPainter p(&img);
         p.setRenderHints(renderHints());
+        p.setRenderHint(QPainter::TextAntialiasing);
 
         QPoint scroll_pos = frame->scrollPosition();
         if (scroll_pos != prev_scroll_pos_) {

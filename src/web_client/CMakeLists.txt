@@ -19,7 +19,7 @@ ELSE(WIN32)
     IF(APPLE)
         set(LIBS SDL2)
     ELSE(APPLE)
-        set(LIBS X11 SDL2 dl pthread GL glut c)
+        set(LIBS X11 SDL2 sndio dl pthread GL glut c)
     ENDIF(APPLE)
 ENDIF(WIN32)
 
