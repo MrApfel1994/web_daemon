@@ -228,7 +228,7 @@ sub Build
         my $webDaemonBinaryPath=ToOsPath("./web_daemon");
         # first make sure we can execute upx -> change rights
         system("chmod +x $upxPath");
-        my $finishCmd="$upxPath --best $webDaemonBinaryPath";
+        my $finishCmd="$upxPath $webDaemonBinaryPath";
         print ("> $finishCmd\n");
         VerboseMessage("> $finishCmd");
         #system($finishCmd);
