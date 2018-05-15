@@ -158,8 +158,15 @@ sub Build
         {
             #network path was not available -> try to access path via network-drive (normally the case for build server)
             my $netSrcFile = ToOsPath("S:/Projekte/webdaemon_libs/win_libs.zip");
-            copy($netSrcFile, $dstFile) or die "Copy Faild: $!";
+            copy($netSrcFile, $dstFile) or die "Copy Failed: $!\n";
         }
+    }
+    elsif ($osname eq 'linux')
+    {
+        #for linux we also copy the file from our MA server (wbb.malighting.de) -> ma dir from server should be mounted to /media/ma_server/
+        $srcFile = "/media/ma_server/Software/Projekte/webdaemon_libs/lin_libs.zip";
+        print ("> copy($srcFile, $dstFile)\n");
+        die "Copy Failed: $!\n" unless(copy($srcFile, $dstFile));
     }
     else
     {
