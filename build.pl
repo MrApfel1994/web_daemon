@@ -226,12 +226,15 @@ sub Build
 
         my $upxPath=ToOsPath("./src/libs/upx");
         my $webDaemonBinaryPath=ToOsPath("./web_daemon");
+
+        system("strip -s $webDaemonBinaryPath");
+
         # first make sure we can execute upx -> change rights
         system("chmod +x $upxPath");
         my $finishCmd="$upxPath $webDaemonBinaryPath";
         print ("> $finishCmd\n");
         VerboseMessage("> $finishCmd");
-        #system($finishCmd);
+        system($finishCmd);
     }
 }
 
