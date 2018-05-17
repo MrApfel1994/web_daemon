@@ -14,11 +14,14 @@
 
 #ifdef __linux__
 Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
+Q_IMPORT_PLUGIN(QXcbGlxIntegrationPlugin)
 
 void gst_load__default_plugins();
 #endif
 
-
+#ifdef XCB_USE_EGL
+#error "qqqq"
+#endif
 
 int main(int argc, char *argv[]) {
 #ifdef __linux__
@@ -31,7 +34,7 @@ int main(int argc, char *argv[]) {
     qt_app.setQuitOnLastWindowClosed(true);
 
     std::string app_id = "0";
-    std::string default_url = "https://www.quirksmode.org/html5/tests/video.html";
+    std::string default_url = "https://get.webgl.org";//"https://www.quirksmode.org/html5/tests/video.html";
     uint32_t parent_proc_id = 0;
 
     if (argc > 1) {
