@@ -19,10 +19,6 @@ Q_IMPORT_PLUGIN(QXcbGlxIntegrationPlugin)
 void gst_load__default_plugins();
 #endif
 
-#ifdef XCB_USE_EGL
-#error "qqqq"
-#endif
-
 int main(int argc, char *argv[]) {
 #ifdef __linux__
     gst_load__default_plugins();
