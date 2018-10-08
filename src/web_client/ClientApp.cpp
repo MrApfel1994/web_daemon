@@ -210,11 +210,30 @@ void ClientApp::PollEvents() {
                 quit_ = true;
                 return;
             }
+            
+            WD::InputEventMsg msg = {};
+            msg.msg_type = WD::InputEvent;
+            msg.ev_type = WD::KeyDown;
+            msg.keycode = (int32_t)e.key.keysym.sym;
+            
+            if (e.key.keysym.sym == SDLK_RETURN) {
+                msg.keycode = 0x01000005;
+            } else if (e.key.keysym.sym == SDLK_BACKSPACE) {
+                msg.keycode = 0x01000003;
+            }
+            
+            pipe_.Write(&msg, sizeof(msg));
         }
         break;
-        case SDL_KEYUP:
-
-            break;
+        case SDL_KEYUP: {
+            WD::InputEventMsg msg = {};
+            msg.msg_type = WD::InputEvent;
+            msg.ev_type = WD::KeyUp;
+            msg.keycode = (int32_t)e.key.keysym.sym;
+            
+            pipe_.Write(&msg, sizeof(msg));
+        }
+        break;
         case SDL_MOUSEBUTTONDOWN: {
             WD::InputEventMsg msg = { 0 };
             msg.msg_type = WD::InputEvent;
